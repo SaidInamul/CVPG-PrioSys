@@ -74,7 +74,7 @@ button {
 button:active {
   outline-color: rgba(58, 108, 217, 0.5);
   outline-style: solid;
-  outline-width: 3.5px;
+  outline-width: 5.5px;
 }
 
 .btnBlue {
@@ -94,7 +94,9 @@ button:active {
 	font-size: 32px;
 	font-weight: 500;
 
-	display: flex;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+
 
 	gap: 56px;
 
@@ -105,6 +107,7 @@ button:active {
 }
 
 .subtitle {
+	margin-left: 20px;
 	display: flex;
 	flex-direction: column;
 }
@@ -131,23 +134,15 @@ button:active {
 	margin-top: 10px;
 }
 
-/*footer section*/
-.footer {
-	grid-column: 2 / 3;
-	grid-row: 3 / 4;
-}
-
 .btnGrey {
 	width: 132px;
   	height: 40px;
 
 	border-style: solid;
-	border-width: 1.5px;
 	background-color: white;
-	border-color: rgba(0, 0, 0, 15%);
 	border-radius: 9px;
 
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 10%);
+	box-shadow: 0 3px 2px rgba(0, 0, 0, 25%);
 
 
   	font-weight: 500;
@@ -156,39 +151,65 @@ button:active {
 }
 
 .content2 {
+	padding-top: 100px;
+
 	color:black;
-	font-size: 32px;
 	font-weight: 500;
-
-	display: flex;
-
-	gap: 56px;
 
 	grid-column: 2 / 3;
 	grid-row: 3 / 4;
 
-	padding-top: 75px;
+	gap: 71px;
+
+	display: grid;
+
+	grid-template-columns: 1fr 1fr;
+	
+	
 }
 
 .feature {
 	display: grid;
 	max-width: 599px;
+	max-height: 495px;
 	grid-template-columns: 1fr 1fr;
-
-	gap: 15px;
-
+	gap: 70px;
 
 }
 
+.subtitle2 {
+/*	max-width: 526px;*/
+/*	max-height: 495px;*/
+
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+
+	gap: 25px;
+}
+
 .item {
+	padding-top: 13px;
+	padding-left: 5px;
+	padding-right: 5px;
 	max-width: 270px;
 	max-height: 208px;
 
 	display: flex;
 	flex-direction: column;
-	gap: 5px;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 20px;
+
+	background-color: white;
+	border-radius: 20px;
+	box-shadow: 0 5px 15px 2px rgba(0, 0, 0, 15%);
+
+	text-align: center;
 }
 
-.detail1 {
-
+/*footer section*/
+.footer {
+	grid-column: 2 / 3;
+	grid-row: 4 / 5;
 }
