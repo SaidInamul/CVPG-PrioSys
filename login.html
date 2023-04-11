@@ -9,28 +9,33 @@
 	<script type="text/javascript" src="library/js/jquery-3.6.3.min.js"></script>
 </head>
 <body>
+	<div class="vl"></div>
 	<div class="img">
-		<img src="Illustration/signup.svg">
+		<img src="Illustration/login.svg">
 	</div>
 	<div class="container">
 		<div class="content">
 			<div class="title">
-				<p>Login</p>
-				<p>Subtitle</p>
+				<p class="big">Login</p>
+				<p class="text subtitle">Login to start prioritizing requirements.</p>
 			</div>
 			<div class="email item">
-				<p>Email</p>
-				<input type="text" placeholder="email" id="email">
+				<p class="text">Email:</p>
+				<input type="text" placeholder="email" id="email" class="long text">
+				<p id="errEmail" class="error">Invalid email....</p>
 			</div>
 			<div class="password item">
-				<p>Password</p>
-				<input type="text" placeholder="password" id="pass">
-				<p>Forgot password?<span>Reset here...</span></p>
+				<p>Password:</p>
+				<input type="text" placeholder="password" id="pass" class="long text">
+				<p class="text" style="font-weight:300;">Forgot password?<a href="#" class="link"><span class="link" id="reset"> Reset here...</span></p></a>
+				<p id="errPass" class="error">Wrong password...</p>
 			</div>
-			<div class="signup">
-				<button class="btnBlue login" id="login">Login</button>
-				<p>Don't have an account?<span id="signup">Sign up...</span></p>
-				<p id="home">Home...</p>
+			<div class="footer item">
+				<button class="btnBlue" id="btnLogin" onclick="this.classList.add('spinner')">
+					<span class="btnText">Login</span>
+				</button>
+				<p class="text" style="font-weight:300; text-align: center;">Don't have an account?<a href="registration.html" class="link"><span id="signup" class="link"> Sign up...</span></p></a>
+				<a href="index.html" class="link"><p id="home" class="text link">Home...</p></a>
 			</div>
 		</div>
 	</div>

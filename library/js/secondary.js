@@ -1,8 +1,11 @@
 $(document).ready(function () {
-	console.log("Hello world");
+	// console.log("CVPG-PrioSys");
 
-	// const btn = document.querySelector("#btnSignUp");
+	$('#signup').click(function(){
+		window.location = "registration.html";
+	});
 
-	// btn.classList.add("spinner");
-	// btn.classList.remove("button--loading");
+	$('#login').click(function(){
+		window.location = "login.html";
+	});
 });
