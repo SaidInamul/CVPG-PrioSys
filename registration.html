@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Registration</title>
+	<link rel="stylesheet" type="text/css" href="library/css/font.css">
+	<link rel="stylesheet" type="text/css" href="library/css/secondary.css">
+	<script type="text/javascript" src="library/js/jquery-3.6.3.min.js"></script>
+</head>
+<body>
+	<div class="img">
+		<img src="Illustration/signup.svg">
+	</div>
+	
+	<div class="container">
+		<div class="content">
+			<div class="title">
+				<p class="big">Sign Up</p>
+				<p class="text subtitle">Register your account here to start a project.</p>
+			</div>
+			<div class="name">
+				<div class="firstName item">
+					<p class="text">First name:</p>
+					<input type="text" placeholder="first name" id="firstN" class="short text">
+				</div>
+				<div class="lastName item">
+					<p class="text">Last name:</p>
+					<input type="text" placeholder="last name" id="lastN" class="short text">
+				</div>
+			</div>
+			<div class="email item">
+				<p class="text">Email:</p>
+				<input type="text" placeholder="email" id="email" class="long text">
+				<p id="usedEmail" class="error">Email has been used.</p>
+				<p id="errEmail" class="error">Invalid email...</p>
+			</div>
+			<div class="password item">
+				<p class="text">Password:</p>
+				<input type="text" placeholder="password" id="pass" class="long text">
+			</div>
+			<div class="cfmPassword item">
+				<p class="text">Confirm Password:</p>
+				<input type="text" placeholder="confirm password" id="pass2" class="long text">
+				<p id="errPass" class="error">Password is not the same...</p>
+			</div>
+			<div class="signup item">
+				<button class="btnBlue" id="btnSignUp" onclick="this.classList.add('spinner')">
+					<span class="btnText">Sign Up</span>
+				</button>
+				<p class="text" style="font-weight:300; text-align: center;">Already have an account?<span id="login" class="link">Log in...</span></p>
+				<p id="home" class="text link">Home...</p>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="library/js/secondary.js"></script>
+</html>
