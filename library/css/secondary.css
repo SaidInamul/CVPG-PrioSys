@@ -7,11 +7,11 @@
 body {
 	font-size: 20px;
 	font-family: Rubik;
-    font-style: normal;
-    font-weight: 400;
+   font-style: normal;
+   font-weight: 400;
 
 	display: grid;
-	grid-template-columns: 700px 1fr;
+	grid-template-columns: 650px 3px 1fr;
 /*	gap: 20px;*/
 
 	background-color: white;
@@ -19,16 +19,6 @@ body {
 /*	justify-content: center;*/
 
 	margin-top: 50px;
-}
-
-.vl {
-  border-left: 3px solid black;
-  height: 100%;
-  position: absolute;
-  left: 50%;
-  margin-left: -60px;
-  align-self: center;
-  top: 0;
 }
 
 .error {
@@ -39,21 +29,31 @@ body {
 }
 
 .img {
-
+	grid-row: 1 / 2;
 	grid-column: 1 / 2;
-	align-self: center;
+/*	align-self: center;*/
 	justify-self: center;
+}
 
-	
+.vl {
+
+/*	position: absolute;*/
+	height: 550px;
+	grid-column: 2 / 3;
+	grid-row: 1 / 2;
+ 	border-left: 3px solid black;
+ 	align-self: center;
 }
 
 .container {
-	grid-column: 2 / 3;
+	grid-column: 3 / 4;
+	grid-row: 1 / 2;
 
 	/*margin-left: 50px;
 	margin-right: 50px;*/
 
 	justify-self: center;
+	align-self: center;
 
 /*	border-style: 3px solid black;*/
 }
