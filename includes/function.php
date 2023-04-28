@@ -1,18 +1,20 @@
 <?php	
 	require "connection.php";
+	
 	session_start();
 
 	if(isset($_GET['action'])) {
 		if($_GET['action'] == "register") {
 			sleep(2);
 
-			if($_GET['fName'] != "" && $_GET['lName'] != "" && $_GET['email'] != "" && $_GET['pass'] != "" && $_GET['pass2'] != "") {
+			if($_GET['fName'] != "" && $_GET['lName'] != "" && $_GET['email'] != "" && $_GET['pass'] != "" && $_GET['pass2'] != "" && $_GET['profileColor'] != "") {
 				$fName = $_GET['fName'];
 				$lName = $_GET['lName'];
 				$email = $_GET['email'];
 				$pass = $_GET['pass'];
 				$pass2 = $_GET['pass2'];
-				registerUser($fName,$lName,$email,$pass,$pass2);
+				$bc = $_GET['profileColor'];
+				registerUser($fName,$lName,$email,$pass,$pass2,$bc);
 			}
 
 			else 
@@ -23,7 +25,7 @@
 			}
 		}
 
-		if($_GET['action'] == "login") {
+		else if($_GET['action'] == "login") {
 			sleep(2);
 
 			if($_GET['email'] != "" && $_GET['pass'] != "") {
@@ -39,9 +41,17 @@
 			}
 		}
 
+		else if($_GET['action'] == 'user') {
+			userProfile();
+		}
+
+		else if($_GET['action'] == 'project') {
+			fetchProject();
+		}
+
 	}
 
-	function registerUser($fName,$lName,$email,$pass,$pass2) {
+	function registerUser($fName,$lName,$email,$pass,$pass2,$bc) {
 		global $con;
 
 		$validPassword = checkPassword($pass,$pass2);
@@ -64,7 +74,7 @@
 		}
 
 		if($validEmail == 1 && $validPassword == 1) {
-			$query = "INSERT INTO user (first_name, last_Name, email, password) VALUES ('$fName','$lName','$email','$pass2')";
+			$query = "INSERT INTO user (first_name, last_Name, email, password, backgroundColor) VALUES ('$fName','$lName','$email','$pass2', '$bc')";
 
 			$result = mysqli_query($con, $query);
 
@@ -127,15 +137,13 @@
 		}
 
 		else {
-			$query = "SELECT idu, first_name, last_name, email, password FROM user WHERE email = '$email' AND password = '$pass' LIMIT 1";
+			$query = "SELECT idu, first_name, last_name, email, backgroundColor FROM user WHERE email = '$email' AND password = '$pass' LIMIT 1";
 			$result = mysqli_query($con, $query);
 
 			if (mysqli_num_rows($result) == 1) {
 
 				$row = mysqli_fetch_array($result);
 				$_SESSION['id'] = $row['idu'];
-				$_SESSION['fName'] = $row['first_name'];
-				$_SESSION['lName'] = $row['last_name'];
 
 				$data['response'] = 1;
 				echo json_encode($data);
@@ -148,5 +156,70 @@
 		   		echo json_encode($data);
 		   }
 		}
+	}
+
+	function userProfile() {
+		global $con;
+
+		$idu = $_SESSION['id'];
+		$bc;
+		$fName;
+		$email;
+
+		$query = "SELECT first_name, email, backgroundColor FROM user WHERE idu = $idu LIMIT 1";
+
+		$result = mysqli_query($con,$query);
+
+		if(mysqli_num_rows($result) == 1) {
+			while($row = mysqli_fetch_row($result)) {
+						$bc = $row[2];
+						$fName = $row[0];
+						$email = $row[1];
+			}
+		}
+
+		$data['fName'] = $fName;
+		$data['bc'] = $bc;
+		$data['email'] = $email;
+		$data['response'] = 1;
+
+		echo json_encode($data);
+	}
+
+	function fetchProject() {
+		global $con;
+		$idu = $_SESSION['id'];
+
+		$query = "SELECT project.title, project.descp, project.idp FROM project JOIN group_project ON project.idp = group_project.idp WHERE idu = $idu;";
+
+    	$result = mysqli_query($con, $query);
+
+    	if(mysqli_num_rows($result) > 0) {
+    		while ($data = mysqli_fetch_array($result)): ?>
+
+	        <div class="project" data-id="<?php echo $data['2'] ?>">
+	            <img src="Illustration/Icon/Static/project.png" class="projectPicture" width="39px" height="39px">
+	            <img src="Illustration/Icon/Static/option.svg" class="option" width="22px" height="22px">
+	            <div class="menus">
+	                <ul class="list">
+	                    <li id="titleProject"><?php echo $data['0'] ?></li>
+	                    <li id="open">Open...</li>
+	                    <li id="delete">Delete...</li>
+	                </ul>   
+	            </div>
+	            <p class="caption title"><?php echo $data['0'] ?></p>
+	            <p class="caption desc" id="projectCaption"><?php echo $data['1'] ?></p>
+	        </div>
+
+			<?php endwhile;
+
+			require_once 'ajaxFunction.php';
+    	}
+
+    	else {
+    		echo 0;
+    	}
+
+		
 	}
 ?>

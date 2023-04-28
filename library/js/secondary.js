@@ -1,3 +1,5 @@
+import color from '../json/backgroundColor.json' assert {type: 'json'};
+
 $(document).ready(function () {
 	// console.log("CVPG-PrioSys");
 
@@ -16,6 +18,12 @@ $(document).ready(function () {
 		var email = $('#email').val();
 		var pass = $('#pass').val();
 		var pass2 = $('#pass2').val();
+		var profileColor;
+
+		const randomIndex = Math.floor(Math.random() * color.length);
+		profileColor = color[randomIndex].bc;
+
+		// console.log(profileColor);
 
 		$.ajax({
             type:'GET',
@@ -25,6 +33,7 @@ $(document).ready(function () {
             	email:email,
             	pass:pass,
             	pass2:pass2,
+            	profileColor:profileColor,
                 action:'register',
             },
             url:'includes/function.php',
@@ -37,7 +46,7 @@ $(document).ready(function () {
 				$('#errPass').hide();
 	        },
             success:function(data) {
-            	myObj = JSON.parse(data);
+            	var myObj = JSON.parse(data);
             	$('#btnSignUp').prop('disabled', false);
             	$('#btnSignUp').removeClass('spinner');
 				$('#btnSignUp').css({"cursor": "pointer"});
@@ -91,7 +100,7 @@ $(document).ready(function () {
 				$('#btnLogin').css({"cursor": "not-allowed"});
 	        },
             success:function(data) {
-            	myObj = JSON.parse(data);
+            	var myObj = JSON.parse(data);
             	$('#btnLogin').prop('disabled', false);
             	$('#btnLogin').removeClass('spinner');
 				$('#btnLogin').css({"cursor": "pointer"});
@@ -100,6 +109,7 @@ $(document).ready(function () {
 				
             	if(myObj.response == 1) {
             		alert("Login successful");
+            		window.location = "home.php";
             	}
 
             	else if (myObj.response == 0) {

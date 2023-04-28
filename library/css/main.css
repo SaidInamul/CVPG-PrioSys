@@ -1,0 +1,333 @@
+.container {
+
+	grid-column: 1 / 2;
+	grid-row: 2 / 3;
+
+	display: grid;
+	grid-template-columns: 1fr;
+
+	width: 1050px;
+
+	background-color: #F5F5F5;
+
+	justify-self: center;
+
+	border-radius: 0px 0px 10px 10px;
+
+	box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.15);
+}
+
+.subheader {
+	grid-column: 1 / 2;
+	grid-row: 1 / 2;
+
+	max-height: 264px;
+	height: 264px;
+
+	display: flex;
+
+	flex-direction: column;
+
+	align-items: start;
+
+	gap: 30px;
+
+	padding: 20px 25px 20px 25px;
+
+	z-index: 2;
+}
+
+.subheaderHead {
+	display: grid;
+	grid-template-columns: 0.5fr 1fr 0.5fr;
+	gap: 20px;
+	width: 100%;
+	max-height: 37px;
+
+/*	justify-content: center;*/
+	align-items: center;
+
+	margin-bottom: 20px;
+
+
+}
+
+.searchBar {
+	
+	grid-column: 2 / 3;
+	justify-self: center;
+	width: 429px;
+	height: 35px;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	background-color: #FFFFFF;
+
+	border-radius: 7px;
+
+	padding-left: 5px;
+
+	outline: solid 2px rgba(0, 0, 0, 15%);
+	transition: outline 0.1s ease-in-out;
+
+}
+
+.content {
+	grid-row: 2 / 3;
+	grid-column:  1 / 2;
+
+	min-height: 217px;
+
+	padding: 15px 25px 15px 25px;
+
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	gap: 20px;
+}
+
+/*show list project content*/
+.project {
+
+	justify-self: center;
+
+	height: 220px;
+	width: 220px;
+
+	background-color: #FFFFFF;
+	box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.15);
+	border-radius: 10px;
+
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: 45px 0.3fr 1fr;
+	justify-content: start;
+
+	padding: 15px;
+
+	cursor: default;
+}
+
+.project:hover {
+	background-color: #F6F6F6;
+}
+
+.option {
+	justify-self: end;
+	margin-top: 0px;
+	margin-right: 0px;
+
+	cursor: pointer;
+}
+
+.menus {
+
+	grid-column: 2 / 3;
+	grid-row: 2 / 3;
+
+	position: absolute;
+
+	z-index: 5;
+
+	margin-top: 35px;
+
+	margin-left: 45px;
+
+	width: 165px;
+	max-height: 85px;
+	min-height: 50px;
+	/*
+	min-width: 140px;*/
+
+	background-color: rgba(255, 255, 255, 0.9);
+
+	font-size: 15px;
+	font-weight: 400;
+	color: rgba(0, 0, 0, 0.6);
+
+	
+	padding: 0.2em 0.5em;
+
+	box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.15);
+	border-radius: 7px;
+
+	display: none;
+}
+
+.list {
+	list-style: none;
+}
+
+.menus li:not(:first-child) {
+	padding: 3px 7px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.menus li:not(:first-child):hover { 
+	color: white;
+	background-image: linear-gradient(rgba(75, 145, 247, 1),rgba(54, 125, 246, 1));
+}
+
+#titleProject {
+	padding: 3px 7px;
+
+/*	margin-bottom: 7px;*/
+
+	font-weight: 500;
+
+	/*text-decoration: underline;
+	text-underline-offset: 9px;*/
+}
+
+.title {
+	grid-column: 1 / 3;
+	grid-row: 2 / 3;
+	z-index: 3;
+}
+
+.desc {
+	grid-column: 1 / 3;
+	grid-row: 3 / 4;
+	z-index: 2;
+
+	/*white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	width: 100%;*/
+}
+
+/*Button*/
+button {
+	padding: 5px 10px;
+	font-size: 15px;
+	text-align: center;
+	font-family: Rubik;
+	font-weight: 400;
+	color: white;
+
+	border: 0px;
+	border-radius: 7px;
+	box-shadow: 0 2px 2px rgba(0, 0, 0, 10%);
+	
+
+	cursor: pointer;
+}
+
+button:active {
+	outline-color: rgba(58, 108, 217, 0.5);
+	outline-style: solid;
+	outline-width: 3.5px;
+}
+
+.btnGrey {
+	border-style: solid;
+	border-width: 1.5px;
+	background-color: white;
+	border-color: rgba(0, 0, 0, 15%);
+
+	color: rgba(61, 61, 61, 1);
+
+}
+
+#addProject{
+	grid-column: 3 / 4;
+	justify-self: end;
+}
+
+/*input field*/
+
+input {
+	height: 100%;
+	width: 100%;
+
+	border-radius: 7px;
+	
+
+	padding: 5px;
+
+	font-family: Rubik;
+	font-weight: 400;
+	font-size: 15px;
+
+	text-decoration: none;
+	outline: solid 2px rgba(185, 185, 185, 1);
+	transition: outline 0.1s ease-in-out;
+
+	cursor: pointer;
+	
+	
+}
+
+input:focus {
+	outline: solid 3.5px rgba(58, 108, 217, 0.5);
+
+	cursor: text;
+	
+}
+
+#search {
+	padding: 0px 0px 0px 5px;
+
+	background-color: transparent;
+
+	outline: none;
+
+	border: none;
+
+}
+
+#search:focus {
+	outline: none;
+}
+
+/*Text*/
+
+#tProject {
+	grid-column: 1 / 2;
+	justify-self: start;
+}
+
+.caption {
+	font-weight: 300;
+	font-size: 15px;
+	letter-spacing: 1.5px;
+	line-height: 30px;
+	color: #414141
+
+}
+
+.heading {
+	font-weight: 600;
+	font-size: 45px;
+	color: black;
+
+}
+
+.link {
+	color: #236BF6;
+
+	cursor: pointer;
+
+	text-decoration: none;
+}
+
+#noProject {
+	grid-column: 2 / 4;
+	display: none;
+}
+
+.title {
+	grid-column: 1 / 3;
+	grid-row: 2 / 3;
+
+	font-weight: 500;
+	font-size: 17px;
+}
+
+.desc {
+	grid-column: 1 / 3;
+	grid-row: 3 / 4;
+}
