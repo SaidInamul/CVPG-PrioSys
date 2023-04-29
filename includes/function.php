@@ -49,6 +49,13 @@
 			fetchProject();
 		}
 
+		else if($_GET['action'] == 'search') {
+			$inputSearch = stripslashes($_GET['inputSearch']);
+			$inputSearch = mysqli_real_escape_string($con,$inputSearch);
+			sleep(2);
+			searchProject($inputSearch);
+		}
+
 	}
 
 	function registerUser($fName,$lName,$email,$pass,$pass2,$bc) {
@@ -221,5 +228,40 @@
     	}
 
 		
+	}
+
+	function searchProject($inputSearch) {
+		global $con;
+		$idu = $_SESSION['id'];
+
+		$query = "SELECT project.title, project.descp, project.idp FROM project JOIN group_project ON project.idp = group_project.idp WHERE idu = $idu AND project.title LIKE '%$inputSearch%';";
+
+		$result = mysqli_query($con, $query);
+
+    	if(mysqli_num_rows($result) > 0) {
+    		while ($data = mysqli_fetch_array($result)): ?>
+
+	        <div class="project" data-id="<?php echo $data['2'] ?>">
+	            <img src="Illustration/Icon/Static/project.png" class="projectPicture" width="39px" height="39px">
+	            <img src="Illustration/Icon/Static/option.svg" class="option" width="22px" height="22px">
+	            <div class="menus">
+	                <ul class="list">
+	                    <li id="titleProject"><?php echo $data['0'] ?></li>
+	                    <li id="open">Open...</li>
+	                    <li id="delete">Delete...</li>
+	                </ul>   
+	            </div>
+	            <p class="caption title"><?php echo $data['0'] ?></p>
+	            <p class="caption desc" id="projectCaption"><?php echo $data['1'] ?></p>
+	        </div>
+
+			<?php endwhile;
+
+			require_once 'ajaxFunction.php';
+    	}
+
+    	else {
+    		echo 0;
+    	}
 	}
 ?>

@@ -11,13 +11,17 @@
 	<title>Home</title>
 </head>
 <body>
+
 	<div class="container">
 		<div class="subheader">
 			<div class="subheaderHead">
 				<p class="caption" id="tProject">Total project: <span id="totalProject">12</span></p>
 				<div class="searchBar">
-					<img src="Illustration/Icon/Static/searchIcon.svg" class="icon search" width="20px" height="20px">
+					<img src="Illustration/Icon/Static/searchIcon.svg" class="icon" id="searchProject">
 					<input type="text" placeholder="Search project here..." id="search">
+					<img src="Illustration/Icon/Static/cancel.svg" class="icon" id="cancelSearch">
+				</div>
+				<div class="loading">
 				</div>
 				<button class="btnGrey" id="addProject">Add project...</button>
 
@@ -27,6 +31,10 @@
 		</div>
 		<div class="content">
 			<p class="caption" id="noProject" style="text-align: center;">No project involve. Create your first project <span class="link">here...</span></p>
+			
+		</div>
+		<div class="empty">
+			<p class="caption" id="noProjectSearch" style="text-align: center;">No project involve. Create your project <span class="link">here...</span></p>
 		</div>
 	</div>
 	
