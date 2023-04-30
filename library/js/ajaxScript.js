@@ -184,8 +184,39 @@ $(document).ready(function(){
         }               
     }
 
-    $('#addProject').click(function(){
+    const modal = document.querySelector("#modal");
+    const closeModal = document.querySelector("#close");
+    $('#addProject').add('#addProject2').add('#addProject3').click(function(){
         console.log("button add project clicked");
+
+        modal.showModal();
+        $('.enterData').val('');
+        $('textarea').val('');
+        $('#pStatus').val('Modifying').attr('disabled',true);
+        $('#title').removeClass('reject');
+        $('#title').focus();
+        $('#title').css({"outline":"solid 3.5px rgba(58, 108, 217, 0.5)"});
+
+    });
+
+    $('#close').click(function(){
+        modal.setAttribute("closing", "");
+        modal.addEventListener("animationend",()=>{
+            modal.removeAttribute("closing");
+            modal.close();},
+            {once:true});
+    });
+
+    $('#save').click(function(){
+        let title = $('#title').val();
+        if(title == '') {
+            console.log("Title can not empty");
+            $('#title').css({"outline":"solid 3.5px rgba(217, 58, 58, 0.5)"});
+            $('#title').addClass('reject')
+        }
+        else {
+            console.log("Good");
+        }
     });
 
 });   
