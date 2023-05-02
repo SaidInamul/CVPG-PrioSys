@@ -49,6 +49,10 @@
 			fetchProject();
 		}
 
+		else if($_GET['action'] == 'getTotalProject') {
+			getTotalProject();
+		}
+
 		else if($_GET['action'] == 'search') {
 			$inputSearch = stripslashes($_GET['inputSearch']);
 			$inputSearch = mysqli_real_escape_string($con,$inputSearch);
@@ -56,6 +60,27 @@
 			searchProject($inputSearch);
 		}
 
+		else if($_GET['action'] == 'addProject') {
+
+			$title = validateInput($_GET['title']);
+			$dev = validateInput($_GET['dev']);
+			$date = $_GET['date'];
+			$pDesc = validateInput($_GET['pDesc']);
+
+			sleep(2);
+			projectAdd($title, $dev, $date, $pDesc);
+		}
+
+	}
+
+	function validateInput ($input) {
+
+		global $con;
+
+		$input = stripslashes($input);
+		$input = mysqli_real_escape_string($con,$input);
+
+		return $input;
 	}
 
 	function registerUser($fName,$lName,$email,$pass,$pass2,$bc) {
@@ -197,7 +222,7 @@
 		global $con;
 		$idu = $_SESSION['id'];
 
-		$query = "SELECT project.title, project.descp, project.idp FROM project JOIN group_project ON project.idp = group_project.idp WHERE idu = $idu;";
+		$query = "SELECT project.title, project.descp, project.idp FROM project JOIN group_project ON project.idp = group_project.idp WHERE group_project.idu = $idu;";
 
     	$result = mysqli_query($con, $query);
 
@@ -226,15 +251,38 @@
     	else {
     		echo 0;
     	}
+	}
 
-		
+	function getTotalProject() {
+		global $con;
+		$idu = $_SESSION['id'];
+
+		$query = "SELECT COUNT(idu) FROM group_project WHERE idu = $idu;";
+
+		$result = mysqli_query($con,$query);
+
+		if(mysqli_num_rows($result) > 0) {
+			while($data = mysqli_fetch_array($result)) {
+				if ($data['0'] == 0) {
+					echo 0;
+				}
+
+				else {
+					echo $data[0];
+				}
+			}
+		}
+
+		else {
+			echo -1;
+		}
 	}
 
 	function searchProject($inputSearch) {
 		global $con;
 		$idu = $_SESSION['id'];
 
-		$query = "SELECT project.title, project.descp, project.idp FROM project JOIN group_project ON project.idp = group_project.idp WHERE idu = $idu AND project.title LIKE '%$inputSearch%';";
+		$query = "SELECT project.title, project.descp, project.idp FROM project JOIN group_project ON project.idp = group_project.idp WHERE group_project.idu = $idu AND project.title LIKE '%$inputSearch%';";
 
 		$result = mysqli_query($con, $query);
 
@@ -263,5 +311,106 @@
     	else {
     		echo 0;
     	}
+	}
+
+	function projectAdd($title, $dev, $date, $pDesc) {
+		global $con;
+		$idu = $_SESSION['id'];
+
+		if($date != '') {
+			$query = "INSERT INTO project (idp, title, totalMembers, exeTime, idps, descp, dateInitiated, idu, developer) VALUES (NULL, '$title', 1, '', 1, '$pDesc', '$date', $idu, '$dev');";
+		}
+
+		else {
+			$query = "INSERT INTO project (idp, title, totalMembers, exeTime, idps, descp, dateInitiated, idu, developer) VALUES (NULL, '$title', 1, '', 1, '$pDesc', current_timestamp(), $idu, '$dev');";
+		}
+
+		$result = mysqli_query($con, $query);
+
+		//After adding project
+		if($result) {
+			$result = addGroupProject($idu);
+
+			echo $result;
+		}
+
+		else {
+			echo $result;
+		}
+	}
+
+	function openProject() {
+		global $con;
+		$idu = $_SESSION['id'];
+	}
+
+	function getProjectId($idu) {
+		global $con;
+
+    	$query = "SELECT idp FROM project WHERE idu = $idu AND idp NOT IN (SELECT idp FROM group_project WHERE idu = $idu) LIMIT 1;";
+
+    	$result = mysqli_query($con,$query);
+
+    	if(mysqli_num_rows($result) > 0) {
+    		while ($row = mysqli_fetch_assoc($result)) {
+    			return $pID = $row['idp'];
+    		}
+    	}
+
+	}
+
+	function addGroupProject ($idu) {
+		global $con;
+
+		$pID = getProjectId($idu);
+
+		$query = "INSERT INTO group_project (idu, idp, idrole, idsv, idsa) VALUES ($idu, $pID, 1, 2, 3);";
+
+		$result = mysqli_query($con,$query);
+
+		if($result) {
+			return 1;
+		}
+
+		else {
+			return 0;
+		}
+	}
+
+	function updateGroupProject() {
+
+	}
+
+	function setProjectStatus() {
+
+	}
+
+	function setStatusVote() {
+
+	}
+
+	function setStatusAgreement() {
+
+	}
+
+	function addStakeholder() {
+
+
+		//After add stakeholder
+		calculateTotalMembers();
+	}
+
+	function calculateTotalMembers() {
+
+		//After calculate total members
+		updateTotalMembers();
+	}
+
+	function updateTotalMembers() {
+
+	}
+
+	function updateProjectDetails() {
+
 	}
 ?>

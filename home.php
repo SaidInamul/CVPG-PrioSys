@@ -14,7 +14,9 @@
 
 	<dialog class="modalAddProject" id="modal">
 		<div class="modalHead item2">
-			<p>Add project</p>
+			<p class="modalTitle">Add project</p>
+			<div class="loading" style="grid-column: 3 / 4; margin-right: 25px; justify-self: end;">
+				</div>
 		</div>
 		<div class="modalContent item2">
 			<div class="items">
@@ -39,10 +41,21 @@
 		</div>
 	</dialog>
 
+	<dialog class="modalMain" id="modalDelete">
+		<img src="Illustration/Icon/Static/warning.png" style="width: 60px; height: 60px;" class="image">
+		<p class="titleModal">Delete the project ?</p>
+		<p class="captionModal">Do you want to delete this project ? You will be removed from the project if you are one of the stakeholders of the project.</p>
+		<hr class="line">
+		<div class="buttons">
+			<button class="close btnGrey btnModal" id="close2">No, keep it</button>
+			<button class="delete btnRed btnModal" id="deleteProject">Yes, delete the project</button>
+		</div>
+	</dialog>
+
 	<div class="container">
 		<div class="subheader">
 			<div class="subheaderHead">
-				<p class="caption" id="tProject">Total project: <span id="totalProject">12</span></p>
+				<p class="caption" id="tProject">Total project: <span id="totalProject"></span></p>
 				<div class="searchBar">
 					<img src="Illustration/Icon/Static/searchIcon.svg" class="icon" id="searchProject">
 					<input type="text" placeholder="Search project here..." id="search">

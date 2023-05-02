@@ -79,16 +79,64 @@
 
         });
 
+        const modal2 = document.querySelector("#modalDelete");
+
         $('div.project').children('.option').click(function(e){
             e.stopPropagation();
             $(this).next().toggle();
+            
             $(this).next().find('li').click(function(e){
                 e.stopPropagation();
-                console.log($(this).attr('id'));
-                $(this).off('click');
-                $(this).parents('div.menus').hide();
+
+                if($(this).attr('id') == 'open'){
+                    window.location = "home.php";
+                }
+                else if($(this).attr('id') == 'delete') {
+                    modal2.showModal();
+                    $('#close2').blur();
+                    $(this).off('click');
+                    $(this).parents('div.menus').hide();
+                    openingModal($(this), $(this).parents('div.project').data('id'));
+
+                }
             });
         });
+
+        function openingModal(e,id){
+            console.log(id);
+            $('#close2').click(function(){
+                modal2.setAttribute("closing", "");
+                modal2.addEventListener("animationend",()=>{
+                    modal2.removeAttribute("closing");
+                    modal2.close();},
+                    {once:true});
+            });
+
+            $('#deleteProject').click(function(){
+                window.location = "home.php";
+            });
+
+        }
+
+        // $('#close2').click(function(){
+        //     modal2.setAttribute("closing", "");
+        //     modal2.addEventListener("animationend",()=>{
+        //         modal2.removeAttribute("closing");
+        //         modal2.close();},
+        //         {once:true});
+
+        //     // window.location = "home.php";
+        // });
+
+        // $('#close2').click(function(){
+        //     modal2.setAttribute("closing", "");
+        //     modal2.addEventListener("animationend",()=>{
+        //         modal2.removeAttribute("closing");
+        //         modal2.close();},
+        //         {once:true});
+
+        //     // window.location = "home.php";
+        // });
 
         $('div.project').click(function(){
             $(this).css({"outline-color":"rgba(58, 108, 217, 0.5)", "outline-style":"solid", "outline-width":"3.5px"});

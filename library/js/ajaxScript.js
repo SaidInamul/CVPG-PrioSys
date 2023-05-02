@@ -55,24 +55,37 @@ $(document).ready(function(){
 
     //Home
     $.ajax({
-            type: "GET",
-            data: {
-                action: "project"
-            },
-            url: "includes/function.php",
-            dataType: "html",
-            success: function (data) {
+        type: "GET",
+        data: {
+            action: "project"
+        },
+        url: "includes/function.php",
+        dataType: "html",
+        success: function (data) {
 
-            	if(data == 0) {
-            		$('#noProject').show();
-            	}
+        	if(data == 0) {
+        		$('#noProject').show();
+        	}
 
-            	else {
-            		$("div.content").html(data);
-            	}
+        	else {
+        		$("div.content").html(data);
+        	}
 
-            }
-        });
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        data: {
+            action: "getTotalProject"
+        },
+        url: "includes/function.php",
+        dataType: "html",
+        success: function (data) {
+
+            $('#totalProject').html(data);
+        }
+    });
 
     $('#cancelSearch').css({"cursor":"pointer"});
 
@@ -156,7 +169,7 @@ $(document).ready(function(){
                             $('.loading').show();
                         },
                         success:function(data) {
-                            goToResult(data);          
+                            goToSearchResult(data);          
                         }
                     });
 
@@ -166,7 +179,7 @@ $(document).ready(function(){
         });
     });
 
-    function goToResult(data){
+    function goToSearchResult(data){
         $('.searchBar').removeClass('disabledSearch')
         $('input').prop('disabled',false);
         $('.searchBar').css({"cursor":"pointer"});
@@ -185,18 +198,22 @@ $(document).ready(function(){
     }
 
     const modal = document.querySelector("#modal");
-    const closeModal = document.querySelector("#close");
+    // const closeModal = document.querySelector("#close");
     $('#addProject').add('#addProject2').add('#addProject3').click(function(){
-        console.log("button add project clicked");
-
         modal.showModal();
         $('.enterData').val('');
         $('textarea').val('');
         $('#pStatus').val('Modifying').attr('disabled',true);
         $('#title').removeClass('reject');
-        $('#title').focus();
-        $('#title').css({"outline":"solid 3.5px rgba(58, 108, 217, 0.5)"});
 
+    });
+
+    $('#title').focus(function(){
+        $(this).css({"outline":"solid 3.5px rgba(58, 108, 217, 0.5)"});
+    });
+
+    $('#title').blur(function(){
+        $(this).css({"outline":"solid 1px rgba(0, 0, 0, 10%)"});
     });
 
     $('#close').click(function(){
@@ -208,15 +225,90 @@ $(document).ready(function(){
     });
 
     $('#save').click(function(){
-        let title = $('#title').val();
+        var title = $('#title').val();
+        var dev = $('#developer').val();
+        // var status = $('#pStatus').val();
+        var date = $('#projectStart').val();
+        var pDesc = $('#projectDesc').val();
+
         if(title == '') {
-            console.log("Title can not empty");
             $('#title').css({"outline":"solid 3.5px rgba(217, 58, 58, 0.5)"});
             $('#title').addClass('reject')
         }
         else {
-            console.log("Good");
+
+            $(this).prop('disabled', true);
+            $(this).siblings('button').prop('disabled', true);
+            $(this).parents('dialog').find('.loading').show();
+
+            $.ajax({
+                type:'GET',
+                data:{
+                    title:title,
+                    dev:dev,
+                    // status:status,
+                    date:date,
+                    pDesc:pDesc,
+                    action:'addProject',
+                },
+                url:'includes/function.php',
+                success:function(data) {
+                      
+                    if(data == 1) {
+                        goToAddProjectResult(data);
+                    }
+
+                    else {
+                        console.log(data);
+                    }
+                    
+                }
+            });
         }
     });
+
+    function goToAddProjectResult(data) {
+        $('#save').prop('disabled', false);
+        $('#save').siblings('button').prop('disabled', false);
+        $('#save').parents('dialog').find('.loading').hide();
+
+        modal.setAttribute("closing", "");
+        modal.addEventListener("animationend",()=>{
+            modal.removeAttribute("closing");
+            modal.close();},
+            {once:true});
+
+        $.ajax({
+            type: "GET",
+            data: {
+                action: "project"
+            },
+            url: "includes/function.php",
+            dataType: "html",
+            success: function (data) {
+
+                if(data == 0) {
+                    $('#noProject').show();
+                }
+
+                else {
+                    $("div.content").html(data);
+                }
+
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            data: {
+                action: "getTotalProject"
+            },
+            url: "includes/function.php",
+            dataType: "html",
+            success: function (data) {
+                $('#totalProject').html(data);
+            }
+        });
+    }
 
 });   

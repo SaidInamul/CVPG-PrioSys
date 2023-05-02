@@ -6,6 +6,8 @@
 	display: grid;
 	grid-template-columns: 1fr;
 
+	margin-bottom: 30px;
+
 	width: 1050px;
 
 	background-color: #F5F5F5;
@@ -210,12 +212,6 @@
 	grid-column: 1 / 3;
 	grid-row: 3 / 4;
 	z-index: 2;
-
-	/*white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-
-	width: 100%;*/
 }
 
 /*Button*/
@@ -229,7 +225,6 @@ button {
 
 	border: 0px;
 	border-radius: 7px;
-/*	box-shadow: 0 1px 1px rgba(0, 0, 0, 10%);*/
 	
 	cursor: pointer;
 }
@@ -238,6 +233,20 @@ button:active {
 	outline-color: rgba(58, 108, 217, 0.5);
 	outline-style: solid;
 	outline-width: 3.5px;
+}
+
+button:disabled {
+	outline: 0px;
+	border: 0px;
+
+	color: rgba(239, 239, 239, 1);
+}
+
+.btnModal {
+	border-radius: 6px;
+
+	font-size: 17px;
+  font-weight: 500;
 }
 
 .btnGrey {
@@ -250,8 +259,28 @@ button:active {
 
 }
 
+.btnGrey:disabled {
+	background-color: rgba(0, 0, 0, 0.05);
+
+	color: #B9B9B9;
+}
+
+.btnRed {
+	background-image: linear-gradient(rgba(255, 67, 90, 1),rgba(255, 59, 48, 1));
+}
+
+.btnRed:active {
+	outline-color: rgba(217, 58, 58, 0.5);
+  outline-style: solid;
+  outline-width: 3.5px;
+}
+
 .btnBlue {
   background-image: linear-gradient(rgba(75, 145, 247, 1),rgba(54, 125, 246, 1));
+}
+
+.btnBlue:disabled {
+	background-image: linear-gradient(rgba(75, 145, 247, 0.8),rgba(54, 125, 246, 0.8));
 }
 
 #addProject{
@@ -275,7 +304,7 @@ input {
 	font-size: 15px;
 
 	text-decoration: none;
-	outline: solid 2px rgba(185, 185, 185, 1);
+	outline: solid 1px rgba(0, 0, 0, 10%);
 	transition: outline 0.1s ease-in-out;
 
 	cursor: pointer;
@@ -313,7 +342,6 @@ input:focus,#title:focus {
 .disabledSearch {
 	background-color: rgba(0, 0, 0, 0.05);
 	color: #B9B9B9;
-/*	cursor: not-allowed;*/
 }
 
 
@@ -324,7 +352,7 @@ input:focus,#title:focus {
  	border: none;
 
  	text-decoration: none;
- 	outline: solid 1px rgba(185, 185, 185, 1);
+ 	outline: solid 1px rgba(0, 0, 0, 10%);
  	transition: outline 0.1s ease-in-out;
 }
 
@@ -343,7 +371,7 @@ textarea {
   border: none;
 
   text-decoration: none;
-  outline: solid 1px rgba(185, 185, 185, 1);;
+  outline: solid 1px rgba(0, 0, 0, 10%);
   transition: outline 0.1s ease-in-out;
 }
 
@@ -391,10 +419,6 @@ textarea:focus{
 
 #noProjectSearch {
 	grid-column: 1 / 2;
-	/*display: none;
-	position: absolute;*/
-
-/*	margin-left: 330px;*/
 }
 
 .title {
@@ -490,6 +514,10 @@ textarea:focus{
 	animation: myAnime2 1s infinite linear;
 }
 
+.spinner {
+
+}
+
 @keyframes myAnime2 {
    to {
       transform: rotate(360deg);
@@ -527,14 +555,19 @@ textarea:focus{
 
   font-weight: 600;
 
-  display: flex;
-  justify-content: center;
+  display: grid;
   align-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
 
   border-radius: 13px 13px 0px 0px;
   border-bottom: rgba(0, 0, 0, 0.25) 1px solid;
 
   height: 100%;
+}
+
+.modalTitle {
+	grid-column: 2 / 3;
+	justify-self: center;
 }
 
 .modalContent {
@@ -604,31 +637,118 @@ textarea:focus{
 
 }
 
-.modalAddProject::backdrop {
+.modalMain {
+
+  margin: 200px auto;
+
+  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.15);
+  background-color: rgba(255, 255, 255, 1);
+  border: 0;
+  border-radius: 7px;
+  width: 344px;
+  height: 245px;
+
+  color: rgba(0, 0, 0, 1);
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(5, 1fr);
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 10px;    
+}
+
+.image {
+  grid-column: 1/2;
+  grid-row: 1/2;
+
+  align-self: center;
+  justify-self: center;
+}
+
+.titleModal {
+  grid-column: 1/2;
+  grid-row: 2/3;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  align-self: center;
+  justify-self: center;
+}
+
+.captionModal {
+  grid-column: 1/2;
+  grid-row: 3/4;
+
+  font-size: 15px;
+  font-weight: 300;
+
+  line-height: 140%;
+  letter-spacing: 6%;
+}
+
+.titleModal, .captionModal {
+  text-align: center;
+}
+
+.line {
+  grid-column: 1/2;
+  grid-row: 4/5;
+
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.buttons {
+  grid-column: 1/2;
+  grid-row: 5/6;
+
+  align-self: center;
+  justify-self: center;
+
+  display: grid;
+  grid-template-columns: 1fr 208px;
+
+  column-gap: 5px;
+}
+
+.close {
+	grid-column: 1 / 2;
+  max-width: 139px;
+}
+
+.delete {
+	grid-column: 2 / 3;
+	max-width: 208px;
+}
+
+.modalAddProject::backdrop, .modalMain::backdrop {
 
   background: rgba(0, 0, 0, 0.3);
   opacity: 0;
 }
 
-.modalAddProject:not([open]) {
+.modalAddProject:not([open]), .modalMain:not([open]) {
   display: none;
 }
 
-.modalAddProject[open] {
+.modalAddProject[open], .modalMain[open] {
   animation: bounce-in 250ms linear both;
 }
-.modalAddProject[open]::backdrop {
+.modalAddProject[open]::backdrop, .modalMain[open]::backdrop {
   animation: fade-in 300ms forwards;
 }
 
-.modalAddProject[closing] {
+.modalAddProject[closing], .modalMain[closing]{
   display: grid;
   pointer-events: none;
   inset: 0;
   animation: scale-down-center 130ms linear both;
 }
 
-.modalAddProject[closing]::backdrop {
+.modalAddProject[closing]::backdrop, .modalMain[closing]::backdrop {
   animation: fade-out 300ms forwards;
 }
 
