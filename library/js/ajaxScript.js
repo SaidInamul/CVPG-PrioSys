@@ -2,46 +2,40 @@ $(document).ready(function(){
 
 	//Header
 	var letter;
-		$.ajax({
-            type:'GET',
-            data:{
-                action:'user',
-            },
-            url:'includes/function.php',
-            success:function(data) {
-            	var myObj = JSON.parse(data);
-				
-            	if(myObj.response == 1) {
-            		$('div.picture').css({"background-image": myObj.bc});
-            		letter = myObj.fName.charAt(0);
-            		$('p.fChar').append(letter.toUpperCase());
-            		$('p.name').append(myObj.fName.substr(0,1).toUpperCase()+myObj.fName.substr(1));
-            		$('p.email').append(myObj.email);
-            		$('#email').append(myObj.email);
-            	}
+	$.ajax({
+        type:'GET',
+        data:{
+            action:'user',
+        },
+        url:'includes/function.php',
+        success:function(data) {
+        	var myObj = JSON.parse(data);
+			
+        	if(myObj.response == 1) {
+        		$('div.picture').css({"background-image": myObj.bc});
+        		letter = myObj.fName.charAt(0);
+        		$('p.fChar').append(letter.toUpperCase());
+        		$('p.name').append(myObj.fName.substr(0,1).toUpperCase()+myObj.fName.substr(1));
+        		$('p.email').append(myObj.email);
+        		$('#email').append(myObj.email);
+        	}
 
-            	else {
-            		alert("Error");
-            	}            	
-            }
-        });
-
-    var currUrl = window.location.href;
-
-    if(currUrl == "http://localhost/cvpg-priosys/home.php") {
-    	$('#linkProject').css({"font-weight":"700"});
-    }
+        	else {
+        		alert("Error");
+        	}            	
+        }
+    });
 
     $('div.buttonProfile').click(function(){
-    	$('div.dropdownProfile').toggle();
+        $('div.dropdownProfile').toggle();
 
-    	$('.menu li').click(function(){
-			if ($(this).attr('id') == "logout") {
-				window.location = "logout.php";
-			}
-			$('.menu li').off('click');
+        $('.menu li').click(function(){
+            if ($(this).attr('id') == "logout") {
+                window.location = "logout.php";
+            }
+            $('.menu li').off('click');
 
-		});
+        });
     });
 
     $('#linkRequirement').click(function(){
@@ -56,12 +50,15 @@ $(document).ready(function(){
             }
 
         });
-
-        console.log("clicked");
     });
+
+    var currUrl = window.location.href;
 
     //Home
     if(currUrl == "http://localhost/cvpg-priosys/home.php") {
+
+        $('#linkProject').css({"font-weight":"700"});
+
         $.ajax({
             type: "GET",
             data: {
@@ -98,6 +95,11 @@ $(document).ready(function(){
 
     //requirement PM
     if(currUrl == "http://localhost/cvpg-priosys/PMrequirement.php") {
+
+        $('#logo').click(function(){
+            window.location.reload();
+        });
+
         $('#linkRequirement').css({"font-weight":"700"});
 
         $.ajax({
@@ -138,6 +140,122 @@ $(document).ready(function(){
 
     }
 
+    $('.back').click(function(){
+        window.location = 'home.php';
+    });
+
+    //Search requirement
+    $('#cancelSearch2').css({"cursor":"pointer"});
+
+    $('.searchBar2').children('#cancelSearch2').click(function(e){
+
+        e.stopPropagation();
+
+        $(this).siblings('input').val('');
+        $(this).parent().css({"outline":"solid 1px rgba(0, 0, 0, 10%)"});
+        $(this).hide();
+
+        $.ajax({
+            type: "POST",
+            data: {
+                action: "requirement"
+            },
+            url: "includes/function.php",
+            dataType: "html",
+            success: function (data) {
+
+                if(data == 0) {
+                    $('div.content').show();
+                }
+
+                else {
+                    $('div.content').hide();
+                    $('.empty').hide();
+                    $('div.requirement').show();
+                    $("tbody.rData").html(data);
+                }
+
+            }
+        });
+    });
+
+    $('#searchRequirement').blur(function(){
+        $(this).parent().css({"outline":"solid 1px rgba(0, 0, 0, 10%)"});
+        $(this).off('keyup');
+    });
+
+
+    $('.searchBar2').click(function(){
+        $(this).css({"outline":"solid 3.5px rgba(58, 108, 217, 0.5)"});
+        $(this).removeClass('reject');
+
+        $(this).find('input').focus().keyup(function(e){
+
+            e.stopPropagation();
+
+            let key = (e.keyCode ? e.keyCode : e.which);
+
+            if($(this).val() == '' && key == '13'){
+                $(this).next('#cancelSearch2').hide();
+
+                $(this).parent().css({"outline":"solid 3.5px rgba(217, 58, 58, 0.5)"});
+                $(this).parent().addClass('reject');
+            }
+
+            else if ($(this).val() != '') {
+                $(this).next('#cancelSearch2').show();
+                $(this).parent().removeClass('reject');
+                
+                if(key == '13'){
+                    $(this).off('keyup');
+                    e.stopPropagation();
+
+                    $(this).parent().addClass('disabledSearch');
+                    $(this).parent().css({"cursor":"not-allowed"});
+                    $(this).prop('disabled', true);
+
+                    $.ajax({
+                        type:'GET',
+                        data:{
+                            inputSearch:$(this).val(),
+                            action:'searchR',
+                        },
+                        url:'includes/function.php',
+                        beforeSend:function(){
+                            
+                            $('.loading').show();
+                        },
+                        success:function(data) {
+                            goToSearchResultRequirement(data);          
+                        }
+                    });
+
+                }
+            }
+            
+        });
+    });
+
+    function goToSearchResultRequirement(data){
+        $('.searchBar2').removeClass('disabledSearch')
+        $('input').prop('disabled',false);
+        $('.searchBar2').css({"cursor":"pointer"});
+        $('.loading').hide(); 
+        if(data == 0) {
+            $('div.content').hide();
+            $('div.requirement').hide();
+            $('div.empty').show();
+        }
+
+        else {
+            $('div.content').hide();
+            $('div.empty').hide();
+            $('div.requirement').show();
+            $("tbody.rData").html(data);
+        }               
+    }
+
+    //Search Project
     $('#cancelSearch').css({"cursor":"pointer"});
 
     $('.searchBar').children('#cancelSearch').click(function(e){
@@ -395,7 +513,6 @@ $(document).ready(function(){
                 data:{
                     title:title,
                     dev:dev,
-                    // status:status,
                     date:date,
                     pDesc:pDesc,
                     action:'addProject',
@@ -459,5 +576,4 @@ $(document).ready(function(){
             }
         });
     }
-
 });   

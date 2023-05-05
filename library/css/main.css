@@ -41,7 +41,7 @@
 
 .subheaderHead {
 	display: grid;
-	grid-template-columns: 0.5fr 1fr 0.5fr;
+	grid-template-columns: 0.4fr 1fr 0.4fr;
 	gap: 20px;
 	width: 100%;
 	max-height: 37px;
@@ -51,7 +51,7 @@
 	margin-bottom: 20px;
 }
 
-.searchBar {
+.searchDiv {
 	
 	grid-column: 2 / 3;
 	justify-self: center;
@@ -359,7 +359,7 @@ input:focus,#title:focus {
 	cursor: text;
 }
 
-#search {
+.searchInputField {
 	padding: 0px 0px 0px 5px;
 
 	background-color: transparent;
@@ -376,7 +376,7 @@ input:focus,#title:focus {
 
 }
 
-#search:focus {
+.searchInputField:focus {
 	outline: none;
 }
 
@@ -491,7 +491,19 @@ textarea:focus{
 	grid-column: 1 / 2;
 }
 
-#cancelSearch {
+/*#cancelSearch {
+	grid-column: 3 / 4;
+	grid-row: 1 / 2;
+
+	margin-left: 400px;
+
+	position: absolute;
+	z-index: 5;
+
+	display: none;
+}*/
+
+.search {
 	grid-column: 3 / 4;
 	grid-row: 1 / 2;
 

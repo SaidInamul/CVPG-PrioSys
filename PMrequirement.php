@@ -52,10 +52,10 @@
 					<img src="Illustration/Icon/Static/back.svg">
 					<p class="caption" id="backToProject" style="color: rgba(35, 107, 246, 1);">Project</p>
 				</div>
-				<div class="searchBar">
-					<img src="Illustration/Icon/Static/searchIcon.svg" class="icon" id="searchProject">
-					<input type="text" placeholder="Search requirement here..." id="search">
-					<img src="Illustration/Icon/Static/cancel.svg" class="icon" id="cancelSearch">
+				<div class="searchBar2 searchDiv">
+					<img src="Illustration/Icon/Static/searchIcon.svg" class="icon">
+					<input type="text" placeholder="Search requirement here..." id="searchRequirement" class="searchInputField">
+					<img src="Illustration/Icon/Static/cancel.svg" class="icon search" id="cancelSearch2">
 				</div>
 				<div class="loading">
 				</div>

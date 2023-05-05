@@ -305,7 +305,7 @@
 <body>
 	<div class="header">
 		<div class="link-right">
-			<a href="home.php" id="logo">CVPG - PrioSys</a>
+			<a id="logo">CVPG - PrioSys</a>
 			<p id="linkRequirement">Requirements</p>
 			<div class="subLinkRequirement">
 				<div class="dropdownRequirement">

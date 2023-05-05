@@ -296,8 +296,6 @@
                     $(this).siblings('button').prop('disabled', true).css({"cursor":"not-allowed"});
                     $(this).siblings('.loading').show();
 
-                    console.log("not empty");
-
                     $.ajax({
                         type:'POST',
                         data:{
@@ -326,6 +324,10 @@
 
         function discardModal(m, rID) {
             $(m).find('#deleteRequirement').click(function(){
+                $(this).prop('disabled', true).css({"cursor":"not-allowed"});
+                $(this).siblings('button').prop('disabled', true).css({"cursor":"not-allowed"});
+                $(this).siblings('.loading').show();
+
                 $.ajax({
                     type:'POST',
                     data:{

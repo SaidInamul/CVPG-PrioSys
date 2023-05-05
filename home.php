@@ -56,10 +56,10 @@
 		<div class="subheader">
 			<div class="subheaderHead">
 				<p class="caption" id="tProject">Total project: <span id="totalProject"></span></p>
-				<div class="searchBar">
+				<div class="searchBar searchDiv">
 					<img src="Illustration/Icon/Static/searchIcon.svg" class="icon" id="searchProject">
-					<input type="text" placeholder="Search project here..." id="search">
-					<img src="Illustration/Icon/Static/cancel.svg" class="icon" id="cancelSearch">
+					<input type="text" placeholder="Search project here..." id="search" class="searchInputField">
+					<img src="Illustration/Icon/Static/cancel.svg" class="icon search" id="cancelSearch">
 				</div>
 				<div class="loading">
 				</div>

@@ -71,6 +71,12 @@
 			projectAdd($title, $dev, $date, $pDesc);
 		}
 
+		else if($_GET['action'] == 'searchR') {
+			$inputSearch = validateInput($_GET['inputSearch']);
+			sleep(2);
+			searchRequirement($inputSearch);
+		}
+
 	}
 
 	else if(isset($_POST['action'])) {
@@ -531,6 +537,41 @@
 		}
 		
 	}
+
+	function searchRequirement($inputSearch) {
+		global $con;
+		$idp = $_SESSION['idp'];
+
+		$query = "SELECT name, rid, dateUpdated, idr FROM requirement WHERE idp = $idp AND name LIKE '%$inputSearch%';";
+
+		$result = mysqli_query($con, $query);
+
+		if(mysqli_num_rows($result) > 0) {
+			$i = 1;
+
+	   		while ($data = mysqli_fetch_assoc($result)): ?>
+
+	        <tr data-id="<?php echo $data['idr'] ?>">
+	        	<td><?php echo $i ?></td>
+	            <td><?php echo $data['rid'] ?></td>
+	            <td><?php echo $data['name'] ?></td>
+	            <td><?php echo $data['dateUpdated'] ?></td>
+	        </tr>
+
+			<?php
+
+			$i++;
+			
+			endwhile;
+
+			require 'ajaxFunction.php';
+		}
+
+		else {
+			echo 0;
+		}
+	}
+
 	function addRequirement($rid,$rName) {
 		global $con;
 		$idp = $_SESSION['idp'];
@@ -622,7 +663,7 @@
 	function editRequirement($rID,$rid,$rName) {
 		global $con;
 
-		$query = "UPDATE requirement SET rid = '$rid', name = '$rName' WHERE idr = $rID;";
+		$query = "UPDATE requirement SET rid = '$rid', name = '$rName', dateUpdated = current_timestamp() WHERE idr = $rID;";
 
 		$result = mysqli_query($con,$query);
 
