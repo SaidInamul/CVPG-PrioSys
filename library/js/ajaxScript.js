@@ -32,15 +32,6 @@ $(document).ready(function(){
     	$('#linkProject').css({"font-weight":"700"});
     }
 
-    // $(document).click(function(e){
-	// 	let $target = $(e.target);
-
-    //     if (!$target.closest('.searchBar').length){
-    //         $('.searchBar').css({"outline":"solid 1px rgba(0, 0, 0, 10%);"});
-    //         $('#cancelSearch').hide();
-    //     }
-	// });
-
     $('div.buttonProfile').click(function(){
     	$('div.dropdownProfile').toggle();
 
@@ -53,39 +44,99 @@ $(document).ready(function(){
 		});
     });
 
+    $('#linkRequirement').click(function(){
+        $('div.dropdownRequirement').toggle();
+
+        $('.menu li').click(function(){
+            if ($(this).attr('id') == "requirementPage") {
+                // window.location = "requirement.php";
+            }
+
+            else if ($(this).attr('id') == "votingPage") {
+            }
+
+        });
+
+        console.log("clicked");
+    });
+
     //Home
-    $.ajax({
-        type: "GET",
-        data: {
-            action: "project"
-        },
-        url: "includes/function.php",
-        dataType: "html",
-        success: function (data) {
+    if(currUrl == "http://localhost/cvpg-priosys/home.php") {
+        $.ajax({
+            type: "GET",
+            data: {
+                action: "project"
+            },
+            url: "includes/function.php",
+            dataType: "html",
+            success: function (data) {
 
-        	if(data == 0) {
-        		$('#noProject').show();
-        	}
+                if(data == 0) {
+                    $('#noProject').show();
+                }
 
-        	else {
-        		$("div.content").html(data);
-        	}
+                else {
+                    $("div.content").html(data);
+                }
 
-        }
-    });
+            }
+        });
 
-    $.ajax({
-        type: "GET",
-        data: {
-            action: "getTotalProject"
-        },
-        url: "includes/function.php",
-        dataType: "html",
-        success: function (data) {
+        $.ajax({
+            type: "GET",
+            data: {
+                action: "getTotalProject"
+            },
+            url: "includes/function.php",
+            dataType: "html",
+            success: function (data) {
 
-            $('#totalProject').html(data);
-        }
-    });
+                $('#totalProject').html(data);
+            }
+        });
+    }
+
+    //requirement PM
+    if(currUrl == "http://localhost/cvpg-priosys/PMrequirement.php") {
+        $('#linkRequirement').css({"font-weight":"700"});
+
+        $.ajax({
+            type: "POST",
+            data: {
+                action: "requirement"
+            },
+            url: "includes/function.php",
+            dataType: "html",
+            success: function (data) {
+
+                if(data == 0) {
+                    $('#noRequirement').show();
+                }
+
+                else {
+                    $('div.content').hide();
+                    $('div.requirement').show();
+                    $("tbody.rData").html(data);
+                }
+
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            data: {
+                action: "getProjectName"
+            },
+            url: "includes/function.php",
+            dataType: "html",
+            success: function (data) {
+
+                $('#projectName').html(data);
+
+            }
+        });
+
+    }
 
     $('#cancelSearch').css({"cursor":"pointer"});
 
@@ -197,14 +248,49 @@ $(document).ready(function(){
         }               
     }
 
-    const modal = document.querySelector("#modal");
-    // const closeModal = document.querySelector("#close");
+    const modal = document.querySelector("#modalAddProject");
+    const modal3 = document.querySelector("#modalAddRequirement");
+
+    $('#addRequirement').add('#addRequirement2').add('#addRequiremen3').click(function(){
+        modal3.showModal();
+        $('.enterData2').val('');
+        $('.enterData2').removeClass('reject');
+
+        focusInput(modal3);
+        blurInput(modal3);
+        saveModal(modal3);
+        closeModal(modal3);
+
+    });
+
+    function focusInput(m) {
+        $(m).find('#rid').focus(function(){
+            $(this).css({"outline":"solid 3.5px rgba(58, 108, 217, 0.5)"});
+        });
+
+        $(m).find('#rName').focus(function(){
+            $(this).css({"outline":"solid 3.5px rgba(58, 108, 217, 0.5)"});
+        });
+    }
+
+    function blurInput(m) {
+        $(m).find('#rid').blur(function(){
+            $(this).css({"outline":"solid 1px rgba(0, 0, 0, 10%)"});
+        });
+        $(m).find('#rName').blur(function(){
+            $(this).css({"outline":"solid 1px rgba(0, 0, 0, 10%)"});
+        });
+    }
+
+
     $('#addProject').add('#addProject2').add('#addProject3').click(function(){
         modal.showModal();
         $('.enterData').val('');
         $('textarea').val('');
         $('#pStatus').val('Modifying').attr('disabled',true);
         $('#title').removeClass('reject');
+
+        closeModal(modal);
 
     });
 
@@ -216,18 +302,81 @@ $(document).ready(function(){
         $(this).css({"outline":"solid 1px rgba(0, 0, 0, 10%)"});
     });
 
-    $('#close').click(function(){
-        modal.setAttribute("closing", "");
-        modal.addEventListener("animationend",()=>{
-            modal.removeAttribute("closing");
-            modal.close();},
-            {once:true});
-    });
+    function closeModal(m) {
+        $(m).find('.btnGrey').click(function(){
+            m.setAttribute("closing", "");
+            m.addEventListener("animationend",()=>{
+                m.removeAttribute("closing");
+                m.close();},
+                {once:true});
+        });
+    }
+
+    function saveModal(m) {
+
+        if($(m).attr('id') == 'modalAddRequirement') {
+
+            $(m).find('#save2').click(function(){
+                var rid = $(this).parent().siblings('div').find('#rid');
+                var rName = $(this).parent().siblings('div').find('#rName');
+
+                if(rid.val() == '' && rName.val() == '') {
+                    rid.css({"outline":"solid 3.5px rgba(217, 58, 58, 0.5)"});
+                    rid.addClass('reject')
+                    rName.css({"outline":"solid 3.5px rgba(217, 58, 58, 0.5)"});
+                    rName.addClass('reject')
+                }
+
+                else if(rid.val() == '') {
+                    rid.css({"outline":"solid 3.5px rgba(217, 58, 58, 0.5)"});
+                    rid.addClass('reject')
+                }
+
+                else if (rName.val() == '') {
+                    rName.css({"outline":"solid 3.5px rgba(217, 58, 58, 0.5)"});
+                    rName.addClass('reject');
+                }
+
+                else {
+                    $(this).prop('disabled', true).css({"cursor":"not-allowed"});
+                    $(this).siblings('button').prop('disabled', true).css({"cursor":"not-allowed"});
+                    $(this).siblings('.loading').show();
+
+                    console.log("not empty");
+
+                    $.ajax({
+                        type:'POST',
+                        data:{
+                            rid:rid.val(),
+                            rName:rName.val(),
+                            action:'addRequirement',
+                        },
+                        url:'includes/function.php',
+                        success:function(data) {
+                              
+                            if(data == 1) {
+                                goToAddRequirementResult(data);
+                            }
+
+                            else {
+                                console.log(data);
+                            }
+                            
+                        }
+                    });
+                }
+            });
+
+        }
+    }
+
+    function goToAddRequirementResult(data) {
+        window.location.reload();
+    }
 
     $('#save').click(function(){
         var title = $('#title').val();
         var dev = $('#developer').val();
-        // var status = $('#pStatus').val();
         var date = $('#projectStart').val();
         var pDesc = $('#projectDesc').val();
 

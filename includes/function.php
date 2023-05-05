@@ -73,6 +73,47 @@
 
 	}
 
+	else if(isset($_POST['action'])) {
+		if($_POST['action'] == "openProject") {
+			$pID = $_POST['pID'];
+			openProject($pID);
+		}
+
+		else if($_POST['action'] == "getProjectName") {
+			getProjectName();
+		}
+
+		else if($_POST['action'] == "requirement") {
+			fetchRequirement();
+		}
+
+		else if($_POST['action'] == "addRequirement") {
+			$rid = validateInput($_POST['rid']);
+			$rName = validateInput($_POST['rName']);
+			sleep(2);
+			addRequirement($rid,$rName);
+		}
+
+		else if($_POST['action'] == "fetchRequirementData") {
+			$rID = $_POST['rID'];
+			fetchRequirementData($rID);
+		}
+
+		else if($_POST['action'] == "editRequirement") {
+			$rid = validateInput($_POST['rid']);
+			$rName = validateInput($_POST['rName']);
+			$rID = $_POST['rID'];
+			sleep(2);
+			editRequirement($rID,$rid,$rName);
+		}
+
+		else if($_POST['action'] == "deleteRequirement") {
+			$rID = $_POST['rID'];
+			sleep(2);
+			deleteRequirement($rID);
+		}
+	}
+
 	function validateInput ($input) {
 
 		global $con;
@@ -339,9 +380,31 @@
 		}
 	}
 
-	function openProject() {
+	function openProject($pID) {
 		global $con;
 		$idu = $_SESSION['id'];
+
+		$query = "SELECT idrole, idp FROM group_project WHERE idu = $idu AND idp = $pID LIMIT 1;";
+
+		$result = mysqli_query($con,$query);
+
+		if(mysqli_num_rows($result) > 0) {
+			$row = mysqli_fetch_assoc($result);
+			$role = $row['idrole'];
+			$_SESSION['idp'] = $row['idp'];
+
+			if($role == 1) {
+				echo 1;
+			}
+
+			else {
+				echo 0;
+			}
+		}
+
+		else {
+			echo -1;
+		}
 	}
 
 	function getProjectId($idu) {
@@ -412,5 +475,179 @@
 
 	function updateProjectDetails() {
 
+	}
+
+	function getProjectName() {
+		global $con;
+		// $idu = $_SESSION['id'];
+		$idp = $_SESSION['idp'];
+
+		$query = "SELECT title FROM project WHERE idp = $idp;";
+
+		$result = mysqli_query($con,$query);
+
+		if(mysqli_num_rows($result) > 0) {
+			while($data = mysqli_fetch_array($result)) {
+				echo $data[0];
+			}
+		}
+
+		else {
+			echo -1;
+		}
+	}
+
+	function fetchRequirement() {
+		global $con;
+		$idp = $_SESSION['idp'];
+
+		$query = "SELECT name, rid, dateUpdated, idr FROM requirement WHERE idp = $idp;";
+
+		$result = mysqli_query($con,$query);
+
+		if(mysqli_num_rows($result) > 0) {
+			$i = 1;
+
+	   		while ($data = mysqli_fetch_assoc($result)): ?>
+
+	        <tr data-id="<?php echo $data['idr'] ?>">
+	        	<td><?php echo $i ?></td>
+	            <td><?php echo $data['rid'] ?></td>
+	            <td><?php echo $data['name'] ?></td>
+	            <td><?php echo $data['dateUpdated'] ?></td>
+	        </tr>
+
+			<?php
+
+			$i++;
+			
+			endwhile;
+
+			require 'ajaxFunction.php';
+		}
+
+		else {
+			echo 0;
+		}
+		
+	}
+	function addRequirement($rid,$rName) {
+		global $con;
+		$idp = $_SESSION['idp'];
+		$idu = $_SESSION['id'];
+
+		$query = "INSERT INTO requirement (idr, name, idpg, totalVote, statusGrouping, idp, rid, dateUpdated) VALUES (NULL, '$rName', 4, '', 0, $idp, '$rid', current_timestamp());";
+
+		$result = mysqli_query($con,$query);
+
+		//After adding requirement
+		if($result) {
+			$result = addVotedRequirement($idu,$idp);
+
+			echo $result;
+		}
+
+		else {
+			echo $result;
+		}
+
+	}
+
+	function getRequirementID($idp) {
+		global $con;
+
+		$query = "SELECT idr FROM requirement WHERE idp = $idp AND idr NOT IN (SELECT idr FROM voted_requirement WHERE idp = $idp) LIMIT 1;";
+
+    	$result = mysqli_query($con,$query);
+
+    	if(mysqli_num_rows($result) > 0) {
+    		while ($row = mysqli_fetch_assoc($result)) {
+    			return $rID = $row['idr'];
+    		}
+    	}
+
+    	else {
+    		echo -1;
+    	}
+	}
+
+	function addVotedRequirement($idu,$idp) {
+		global $con;
+
+		$rID = getRequirementID($idp);
+
+		$query = "INSERT INTO voted_requirement (idu, idr, idp, vote) VALUES ($idu, $rID, $idp, '');";
+
+		$result = mysqli_query($con,$query);
+
+		if($result) {
+			return 1;
+		}
+
+		else {
+			return 0;
+		}
+
+	}
+
+	function fetchRequirementData($rID) {
+		global $con;
+
+		$rid;
+		$rName;
+
+		$query = "SELECT rid, name FROM requirement WHERE idr = $rID LIMIT 1;";
+
+		$result = mysqli_query($con, $query);
+
+		if(mysqli_num_rows($result) > 0) {
+			$row = mysqli_fetch_assoc($result);
+			$rid = $row['rid'];
+			$rName = $row['name'];
+		}
+
+		else {
+			$data['response'] = 0;
+
+			echo json_encode($data);
+		}
+
+		$data['rid'] = $rid;
+		$data['rName'] = $rName;
+		$data['response'] = 1;
+
+		echo json_encode($data);
+	}
+
+	function editRequirement($rID,$rid,$rName) {
+		global $con;
+
+		$query = "UPDATE requirement SET rid = '$rid', name = '$rName' WHERE idr = $rID;";
+
+		$result = mysqli_query($con,$query);
+
+		if($result) {
+			echo 1;
+		}
+
+		else {
+			echo 0;
+		}
+	}
+
+	function deleteRequirement($rID) {
+		global $con;
+
+		$query = "DELETE FROM requirement WHERE idr = $rID;";
+
+		$result = mysqli_query($con,$query);
+
+		if($result) {
+			echo 1;
+		}
+
+		else {
+			echo 0;
+		}
 	}
 ?>

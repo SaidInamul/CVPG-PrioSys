@@ -1,5 +1,5 @@
 <?php
-	include_once("header.php");
+	include_once("header2.php");
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +12,9 @@
 </head>
 <body>
 
-	<dialog class="modalManage" id="modalAddProject">
+	<p>This is requirement page for stakeholders</p>
+
+	<!-- <dialog class="modalAddProject" id="modal">
 		<div class="modalHead item2">
 			<p class="modalTitle">Add project</p>
 			<div class="loading" style="grid-column: 3 / 4; margin-right: 25px; justify-self: end;">
@@ -47,7 +49,7 @@
 		<p class="captionModal">Do you want to delete this project ? You will be removed from the project if you are one of the stakeholders of the project.</p>
 		<hr class="line">
 		<div class="buttons">
-			<button class="close btnGrey btnModal" id="closeModalMain">No, keep it</button>
+			<button class="close btnGrey btnModal" id="close2">No, keep it</button>
 			<button class="delete btnRed btnModal" id="deleteProject">Yes, delete the project</button>
 		</div>
 	</dialog>
@@ -76,7 +78,7 @@
 		<div class="empty">
 			<p class="caption" id="noProjectSearch" style="text-align: center;">No project involve. Create your project <span class="link" id="addProject3">here...</span></p>
 		</div>
-	</div>
+	</div> -->
 	
 </body>
 </html>

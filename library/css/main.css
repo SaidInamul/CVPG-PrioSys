@@ -46,12 +46,9 @@
 	width: 100%;
 	max-height: 37px;
 
-/*	justify-content: center;*/
 	align-items: center;
 
 	margin-bottom: 20px;
-
-
 }
 
 .searchBar {
@@ -62,13 +59,10 @@
 	height: 35px;
 
 	display: grid;
-/*	justify-content: center;*/
 	align-items: center;
 	grid-template-columns: 20px 1fr 20px;
 
 	background-color: #FFFFFF;
-
-/*	background-color: rgba(0, 0, 0, 0.05);*/
 
 	border-radius: 7px;
 
@@ -90,6 +84,17 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	gap: 20px;
+}
+
+.requirement {
+	grid-row: 2 / 3;
+	grid-column:  1 / 2;
+
+	min-height: 217px;
+
+	padding: 15px 25px 15px 25px;
+
+	display: none;
 }
 
 .empty {
@@ -155,8 +160,8 @@
 
 	margin-left: 45px;
 
-	width: 165px;
-	max-height: 85px;
+	min-width: 165px;
+/*	max-height: 85px;*/
 	min-height: 50px;
 	/*
 	min-width: 140px;*/
@@ -288,6 +293,42 @@ button:disabled {
 	justify-self: end;
 }
 
+#addRequirement{
+	grid-column: 3 / 4;
+	justify-self: end;
+}
+
+.back{
+	grid-column: 1 / 2;
+
+	align-self: center;
+	justify-self: start;
+
+	display: flex;
+	gap: 13px;
+	align-items: center;
+	justify-content: start;
+
+	cursor: pointer;
+}
+
+.btnSecondary {
+  background-color: transparent;
+
+  font-weight: 300;
+  font-size: 13px;
+}
+
+.btnSecondary:active {
+	outline-color: rgba(58, 108, 217, 0.5);
+  outline-style: solid;
+  outline-width: 0px;
+}
+
+.red {
+  color: #F62323;
+}
+
 /*input field*/
 
 input {
@@ -345,7 +386,7 @@ input:focus,#title:focus {
 }
 
 
-.enterData, #title{
+.enterData, #title, .enterData2{
 	font-weight: 300;
 
 	border-radius: 6px;
@@ -417,7 +458,15 @@ textarea:focus{
 	display: none;
 }
 
+#noRequirement {
+	grid-column: 1 / 5;
+}
+
 #noProjectSearch {
+	grid-column: 1 / 2;
+}
+
+#noRequirementSearch {
 	grid-column: 1 / 2;
 }
 
@@ -525,7 +574,7 @@ textarea:focus{
 }
 
 /*Modal...*/
-.modalAddProject {
+.modalManage {
 
   margin: 100px auto;
 
@@ -724,31 +773,132 @@ textarea:focus{
 	max-width: 208px;
 }
 
-.modalAddProject::backdrop, .modalMain::backdrop {
+.modalManage2 {
+  margin: auto;
+
+  box-shadow: 0px 5px 15px 2px rgba(0, 0, 0, 0.15);
+  background-color: rgba(255, 255, 255, 1);
+  border: 0;
+  border-radius: 10px;
+  width: 515px;
+  height: 135px;
+
+  padding: 0px 20px;
+
+  display: grid;
+  grid-template-rows: 1fr 1px 45px;
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+
+.modalContent2 {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+
+  display: grid;
+
+  grid-template-rows: 0.5fr 1fr;
+  grid-column: 0.4fr 1fr;
+
+  align-items: center;
+
+  column-gap: 20px;
+  row-gap: 20px;
+}
+
+.naming2 {
+  justify-self: end;
+  font-weight: 300;
+  font-size: 13px;
+}
+
+.enterData2 {
+  margin-right: 0px;
+
+  height: 22px;
+
+  font-weight: 300;
+  font-size: 13px;
+
+  width: 304px;
+}
+
+.line2 {
+  grid-row: 2 / 3;
+  grid-column: 1 / 2;
+  border: rgba(0, 0, 0, 0.25) 1x solid;
+}
+
+.modalFoot2 {
+  grid-row: 3 / 4;
+  grid-column: 1 / 2;
+
+  display: grid;
+  grid-template-columns: 1fr 0.3fr 0.3fr 0.2fr;
+  column-gap: 10px;
+
+  align-items: center;
+
+  height: 100%;
+}
+
+.modalFoot2 button {
+	padding: 3px 10px;
+
+	min-height: 26px;
+}
+
+#deleteRequirement {
+  grid-column: 1 / 2;
+
+  justify-self: start;
+
+  max-width: 181px;
+
+  padding: 0px;
+}
+
+#close2{
+  grid-column: 3 / 4;
+
+  justify-self: end;
+
+  text-align: center;
+}
+
+#save2 {
+  grid-column: 4 / 5;
+
+  justify-self: end;
+
+  text-align: center;
+}
+
+.modalManage::backdrop, .modalMain::backdrop, .modalManage2::backdrop {
 
   background: rgba(0, 0, 0, 0.3);
   opacity: 0;
 }
 
-.modalAddProject:not([open]), .modalMain:not([open]) {
+.modalManage:not([open]), .modalMain:not([open]), .modalManage2:not([open]) {
   display: none;
 }
 
-.modalAddProject[open], .modalMain[open] {
+.modalManage[open], .modalMain[open], .modalManage2[open] {
   animation: bounce-in 250ms linear both;
 }
-.modalAddProject[open]::backdrop, .modalMain[open]::backdrop {
+.modalManage[open]::backdrop, .modalMain[open]::backdrop, .modalManage2[open]::backdrop {
   animation: fade-in 300ms forwards;
 }
 
-.modalAddProject[closing], .modalMain[closing]{
+.modalManage[closing], .modalMain[closing], .modalManage2[closing]{
   display: grid;
   pointer-events: none;
   inset: 0;
   animation: scale-down-center 130ms linear both;
 }
 
-.modalAddProject[closing]::backdrop, .modalMain[closing]::backdrop {
+.modalManage[closing]::backdrop, .modalMain[closing]::backdrop, .modalManage2[closing]::backdrop {
   animation: fade-out 300ms forwards;
 }
 
@@ -784,4 +934,60 @@ textarea:focus{
   50%{ opacity: 1; transform: scale(1.0); }
   70%{ transform: scale(0.97); }
   100%{ transform: scale(1); }
+}
+
+
+/*table*/
+
+table {
+  font-size: 12px;
+  font-weight: 400;
+  border: 1px solid #B9B9B9;
+  border-collapse: collapse;
+
+  width: 100%;
+
+  text-align: left;
+
+}
+
+/*.tVoting {
+
+  width: 847px;
+
+}*/
+
+th {
+  font-family: Rubik;
+  font-style: normal;
+  font-weight: 600;
+
+  border-bottom: 1px solid #B9B9B9;
+
+}
+
+td, th {
+  padding: 10px 12px;
+}
+
+thead {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+
+tr:nth-child(even) {
+  background-color: white;
+}
+
+tr:nth-child(odd) {
+  background-color: rgba(255, 255, 255, 0.002);
+}
+
+
+.rData tr:hover {
+/*  background-image: linear-gradient(rgba(75, 145, 247, 1),rgba(54, 125, 246, 1));*/
+  background-color: #0166fe;
+  color: white;
+
+  cursor: pointer;
 }
