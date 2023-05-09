@@ -8,7 +8,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="library/css/main.css">
-	<title>Home</title>
+	<title>Requirements</title>
 </head>
 <body>
 
@@ -48,7 +48,7 @@
 	<div class="container">
 		<div class="subheader">
 			<div class="subheaderHead">
-				<div class="back">
+				<div class="back backProject">
 					<img src="Illustration/Icon/Static/back.svg">
 					<p class="caption" id="backToProject" style="color: rgba(35, 107, 246, 1);">Project</p>
 				</div>
@@ -59,7 +59,7 @@
 				</div>
 				<div class="loading">
 				</div>
-				<button class="btnGrey" id="addRequirement">Add requirement...</button>
+				<button class="btnGrey btnSubHeader" id="addRequirement">Add requirement...</button>
 
 			</div>
 			<p class="heading caption">Project: <span id="projectName"></span></p>

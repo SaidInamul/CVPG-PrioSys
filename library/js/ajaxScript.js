@@ -42,11 +42,19 @@ $(document).ready(function(){
         $('div.dropdownRequirement').toggle();
 
         $('.menu li').click(function(){
-            if ($(this).attr('id') == "requirementPage") {
-                // window.location = "requirement.php";
+            if ($(this).attr('id') == "requirementPagePM") {
+                window.location = "PMrequirement.php";
             }
 
-            else if ($(this).attr('id') == "votingPage") {
+            else if ($(this).attr('id') == "votingPagePM") {
+            }
+
+            else if ($(this).attr('id') == "requirementPageSK") {
+                window.location = "Srequirement.php";
+            }
+
+            else if ($(this).attr('id') == "votingPageSK") {
+                // window.location = "Srequirement.php";
             }
 
         });
@@ -93,8 +101,8 @@ $(document).ready(function(){
         });
     }
 
-    //requirement PM
-    if(currUrl == "http://localhost/cvpg-priosys/PMrequirement.php") {
+    //requirement
+    if(currUrl == "http://localhost/cvpg-priosys/PMrequirement.php" || currUrl == "http://localhost/cvpg-priosys/Srequirement.php") {
 
         $('#logo').click(function(){
             window.location.reload();
@@ -140,7 +148,7 @@ $(document).ready(function(){
 
     }
 
-    $('.back').click(function(){
+    $('.backProject').click(function(){
         window.location = 'home.php';
     });
 
@@ -366,6 +374,7 @@ $(document).ready(function(){
         }               
     }
 
+    //Modal
     const modal = document.querySelector("#modalAddProject");
     const modal3 = document.querySelector("#modalAddRequirement");
 
@@ -492,6 +501,7 @@ $(document).ready(function(){
         window.location.reload();
     }
 
+    // Add project 'save button'
     $('#save').click(function(){
         var title = $('#title').val();
         var dev = $('#developer').val();
@@ -575,5 +585,253 @@ $(document).ready(function(){
                 $('#totalProject').html(data);
             }
         });
+    }
+
+    //Stakeholder
+    if(currUrl == "http://localhost/cvpg-priosys/PMStakeholder.php" || currUrl == "http://localhost/cvpg-priosys/SStakeholder.php") {
+
+        $('#logo').click(function(){
+            window.location.reload();
+        });
+
+        $('#linkStakeholders').css({"font-weight":"700"});
+
+        $.ajax({
+            type: "GET",
+            data: {
+                action: "stakeholder"
+            },
+            url: "includes/function.php",
+            dataType: "html",
+            success: function (data) {
+
+                if(data == 0) {
+                    $('#noStakeholder').show();
+                }
+
+                else {
+                    $('div.content').hide();
+                    $('div.stakeholder').show();
+                    $("tbody.sData").html(data);
+                }
+
+            }
+        });
+    }
+
+    $('#addStakeholder').add('#addStakeholder2').add('#addStakeholder3').click(function(){
+        window.location = "http://localhost/cvpg-priosys/PMAddStakeholder.php"
+    });
+
+    //Search stakeholder
+    $('#cancelSearch3').css({"cursor":"pointer"});
+
+    $('.searchBar3').children('#cancelSearch3').click(function(e){
+
+        e.stopPropagation();
+
+        $(this).siblings('input').val('');
+        $(this).parent().css({"outline":"solid 1px rgba(0, 0, 0, 10%)"});
+        $(this).hide();
+
+        $.ajax({
+            type: "GET",
+            data: {
+                action: "stakeholder"
+            },
+            url: "includes/function.php",
+            dataType: "html",
+            success: function (data) {
+
+                if(data == 0) {
+                    $('#noStakeholder').show();
+                }
+
+                else {
+                    $('div.content').hide();
+                    $('div.empty').hide();
+                    $('div.stakeholder').show();
+                    $("tbody.sData").html(data);
+                }
+
+            }
+        });
+    });
+
+    $('#searchStakeholder').blur(function(){
+        $(this).parent().css({"outline":"solid 1px rgba(0, 0, 0, 10%)"});
+        $(this).off('keyup');
+    });
+
+
+    $('.searchBar3').click(function(){
+        $(this).css({"outline":"solid 3.5px rgba(58, 108, 217, 0.5)"});
+        $(this).removeClass('reject');
+
+        $(this).find('input').focus().keyup(function(e){
+
+            e.stopPropagation();
+
+            let key = (e.keyCode ? e.keyCode : e.which);
+
+            if($(this).val() == '' && key == '13'){
+                $(this).next('#cancelSearch3').hide();
+
+                $(this).parent().css({"outline":"solid 3.5px rgba(217, 58, 58, 0.5)"});
+                $(this).parent().addClass('reject');
+            }
+
+            else if ($(this).val() != '') {
+                $(this).next('#cancelSearch3').show();
+                $(this).parent().removeClass('reject');
+                
+                if(key == '13'){
+                    $(this).off('keyup');
+                    e.stopPropagation();
+
+                    $(this).parent().addClass('disabledSearch');
+                    $(this).parent().css({"cursor":"not-allowed"});
+                    $(this).prop('disabled', true);
+
+                    $.ajax({
+                        type:'GET',
+                        data:{
+                            inputSearch:$(this).val(),
+                            action:'searchS',
+                        },
+                        url:'includes/function.php',
+                        beforeSend:function(){
+                            
+                            $('.loading').show();
+                        },
+                        success:function(data) {
+                            goToSearchResultStakeholderProject(data);          
+                        }
+                    });
+
+                }
+            }
+            
+        });
+    });
+
+    function goToSearchResultStakeholderProject(data){
+        $('.searchBar3').removeClass('disabledSearch')
+        $('input').prop('disabled',false);
+        $('.searchBar3').css({"cursor":"pointer"});
+        $('.loading').hide(); 
+        if(data == 0) {
+            $('div.content').hide();
+            $('div.stakeholder').hide();
+            $('div.empty').show();
+        }
+
+        else {
+            $('div.content').hide();
+            $('div.empty').hide();
+            $('div.stakeholder').show();
+            $("tbody.sData").html(data);
+        }               
+    }
+
+    //Add stakeholder page
+    if(currUrl == "http://localhost/cvpg-priosys/PMAddStakeholder.php") {
+        $('#linkStakeholders').css({"font-weight":"700"});
+    }
+
+    $('.backStakeholder').click(function(){
+        window.location = 'http://localhost/cvpg-priosys/PMStakeholder.php';
+    });
+
+    //Search stakeholder for invitation
+    $('#cancelSearch4').css({"cursor":"pointer"});
+
+    $('.searchBar4').children('#cancelSearch4').click(function(e){
+
+        e.stopPropagation();
+
+        $(this).siblings('input').val('');
+        $(this).parent().css({"outline":"solid 1px rgba(0, 0, 0, 10%)"});
+        $(this).hide();
+
+        $('.content').show();
+        $('.stakeholderResult').hide();
+        $('.empty').hide();
+    });
+
+    $('#searchStakeholder2').blur(function(){
+        $(this).parent().css({"outline":"solid 1px rgba(0, 0, 0, 10%)"});
+        $(this).off('keyup');
+    });
+
+
+    $('.searchBar4').click(function(){
+        $(this).css({"outline":"solid 3.5px rgba(58, 108, 217, 0.5)"});
+        $(this).removeClass('reject');
+
+        $(this).find('input').focus().keyup(function(e){
+
+            e.stopPropagation();
+
+            let key = (e.keyCode ? e.keyCode : e.which);
+
+            if($(this).val() == '' && key == '13'){
+                $(this).next('#cancelSearch4').hide();
+
+                $(this).parent().css({"outline":"solid 3.5px rgba(217, 58, 58, 0.5)"});
+                $(this).parent().addClass('reject');
+            }
+
+            else if ($(this).val() != '') {
+                $(this).next('#cancelSearch4').show();
+                $(this).parent().removeClass('reject');
+                
+                if(key == '13'){
+                    $(this).off('keyup');
+                    e.stopPropagation();
+
+                    $(this).parent().addClass('disabledSearch');
+                    $(this).parent().css({"cursor":"not-allowed"});
+                    $(this).prop('disabled', true);
+
+                    $.ajax({
+                        type:'GET',
+                        data:{
+                            inputSearch:$(this).val(),
+                            action:'searchSToInvite',
+                        },
+                        url:'includes/function.php',
+                        beforeSend:function(){
+                            
+                            $('.loading').show();
+                        },
+                        success:function(data) {
+                            goToSearchResultStakeholder(data);          
+                        }
+                    });
+
+                }
+            }
+            
+        });
+    });
+
+    function goToSearchResultStakeholder(data){
+        $('.searchBar4').removeClass('disabledSearch')
+        $('input').prop('disabled',false);
+        $('.searchBar4').css({"cursor":"pointer"});
+        $('.loading').hide(); 
+        if(data == 0) {
+            $('div.content').hide();
+            $('div.stakeholder').hide();
+            $('div.empty').show();
+        }
+
+        else {
+            $('div.content').hide();
+            $('div.empty').hide();
+            $('div.stakeholderResult').show();
+            $("tbody.sDataAdd").html(data);
+        }               
     }
 });   

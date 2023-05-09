@@ -65,151 +65,147 @@
         //     });
         // });
 
-        $('div.project').children('#projectCaption').html(function(index,currentText) {
-            var maxLength = 73;
-            var text = 'See more...';
-
-            if (currentText.length > maxLength) {
-                return currentText.substr(0,maxLength) + '. ' + text.fontcolor('#236BF6');
-            }
-
-            else {
-                return currentText + ' ' + text.fontcolor("#236BF6");
-            }
-
-        });
-
         const modal2 = document.querySelector("#modalDelete");
+        const modal4 = document.querySelector("#modalEditRequirement");
+        const modal7 = document.querySelector("#modalRemoveStakeholder");
+        const modal5 = document.querySelector("#modalViewPM");
+        const modal6 = document.querySelector("#modalViewSK");
+        const modal8 = document.querySelector("#addedStakeholder");
 
-        $('div.project').children('.option').click(function(e){
-            e.stopPropagation();
-            $(this).next().toggle();
-            
-            $(this).next().find('li').click(function(e){
+        function openingModalProject(e,pid,m){
 
-                e.stopPropagation();
-
-                var pID = $(this).parents('div.project').data('id')
-
-                if($(this).attr('id') == 'open'){
-                    // window.location = "home.php";
-
-                    $.ajax({
-                        type: "POST",
-                        data: {
-                            pID: pID,
-                            action: "openProject"
-                        },
-                        url: "includes/function.php",
-                        dataType: "html",
-                        success: function (data) {
-
-                            if(data == 1) {
-                                // $('#noProject').show();
-
-                                window.location = "PMrequirement.php";
-                            }
-
-                            else if (data == 0){
-                                // $("div.content").html(data);
-
-                                window.location = "Srequirement.php";
-                            }
-
-                            else {
-                                alert("Fail to open project");
-                                window.locatioin = "home.php";
-                            }
-
-                        }
-                    });
-
-                }
-
-                else if($(this).attr('id') == 'delete') {
-                    modal2.showModal();
-                    $('#closeModalMain').blur();
-                    $(this).off('click');
-                    $(this).parents('div.menus').hide();
-                    openingModal($(this), $(this).parents('div.project').data('id'));
-
-                }
-            });
-        });
-
-        function openingModal(e,id){
-            console.log(id);
-
-            $('#closeModalMain').click(function(){
-                modal2.setAttribute("closing", "");
-                modal2.addEventListener("animationend",()=>{
-                    modal2.removeAttribute("closing");
-                    modal2.close();},
+            $('.btnGrey').click(function(){
+                m.setAttribute("closing", "");
+                m.addEventListener("animationend",()=>{
+                    m.removeAttribute("closing");
+                    m.close();},
                     {once:true});
             });
 
-            $('#deleteProject').click(function(){
+            $('.btnRed').click(function(){
                 window.location = "home.php";
             });
 
         }
 
-        $('div.project').click(function(){
-            $(this).css({"outline-color":"rgba(58, 108, 217, 0.5)", "outline-style":"solid", "outline-width":"3.5px"});
+        function openingModalMember(mid,m){
 
-            var pID = $(this).data('id')
-
-            $.ajax({
-                type: "POST",
-                data: {
-                    pID: pID,
-                    action: "openProject"
-                },
-                url: "includes/function.php",
-                dataType: "html",
-                success: function (data) {
-
-                    if(data == 1) {
-                        // $('#noProject').show();
-
-                        window.location = "PMrequirement.php";
-                    }
-
-                    else if (data == 0){
-                        // $("div.content").html(data);
-
-                        window.location = "Srequirement.php";
-                    }
-
-                    else {
-                        alert("Fail to open project");
-                        window.locatioin = "home.php";
-                    }
-
-                }
+            $('.btnGrey').click(function(){
+                m.setAttribute("closing", "");
+                m.addEventListener("animationend",()=>{
+                    m.removeAttribute("closing");
+                    m.close();},
+                    {once:true});
             });
-        });
 
-        function fetchRequirementData(rID) {
-            $.ajax({
-                type:'POST',
-                data:{
-                    rID:rID,
-                    action:'fetchRequirementData',
-                },
-                url:'includes/function.php',
-                success:function(data) {
-                    
-                    var myObj = JSON.parse(data);
-
-                    editRequirement(myObj,rID);
-                }
+            $('.btnRed').click(function(){
+                window.location = "home.php";
             });
+
         }
 
-        function editRequirement(data, rID) {
-            const modal4 = document.querySelector("#modalEditRequirement");
+        //Modal fetch data
+        function fetchData(ID,currUrls) {
 
+            //Stkaeholder page view data
+            if(currUrls == "http://localhost/cvpg-priosys/PMStakeholder.php" || currUrls == "http://localhost/cvpg-priosys/SStakeholder.php") {
+                $.ajax({
+                    type:'POST',
+                    data:{
+                        uID:ID,
+                        action:'fetchUserData',
+                    },
+                    url:'includes/function.php',
+                    success:function(data) {
+                        
+                        var myObj = JSON.parse(data);
+
+                        viewUser(myObj,ID, currUrls);
+                    }
+                });
+            }
+
+            //requirement page edit data
+            else if (currUrls == "http://localhost/cvpg-priosys/PMrequirement.php") {
+                $.ajax({
+                    type:'POST',
+                    data:{
+                        rID:ID,
+                        action:'fetchRequirementData',
+                    },
+                    url:'includes/function.php',
+                    success:function(data) {
+                        
+                        var myObj = JSON.parse(data);
+
+                        editRequirement(myObj,ID, currUrls);
+                    }
+                });
+            } 
+        }
+
+        //Show modal for view user of the project
+        function viewUser(data,mID, currUrls) {
+            if(data.response == 1) {
+                if(data.roleID == 2) {
+
+                    console.log(data.uStatusAgreement);
+
+                    modal6.showModal();
+
+                    $(modal6).find('.picture2').css({"background-image": data.backgrounColor});
+                    letter = data.uFirstName.charAt(0);
+                    $(modal6).find('.fChar2').append(letter.toUpperCase());
+                    $(modal6).find('b').append(data.uFirstName.substr(0,1).toUpperCase()+data.uFirstName.substr(1)+' '+data.uSecondName.substr(0,1).toUpperCase()+data.uSecondName.substr(1));
+                    $(modal6).find('.email2').append(data.uEmail);
+
+                    $(modal6).find('#companyName').append(data.uCompany);
+                    $(modal6).find('#emailMember').append(data.uEmail);
+                    $(modal6).find('#locationMember').append(data.uLocation);
+                    $(modal6).find('#statusVoteMember').append(data.uStatusVote);
+                    $(modal6).find('#roleMember').append(data.uRole);
+                    $(modal6).find('#statusAggrementMember').append(data.uStatusAgreement);
+
+                    blurButton(modal6);
+                    closeModal(modal6,currUrls);
+                    discardModal(modal6, mID, currUrls);
+
+                }
+
+                else if (data.roleID == 1) {
+
+                    console.log(data.uStatusAgreement);
+
+                    modal5.showModal();
+
+                    $(modal5).find('.picture2').css({"background-image": data.backgrounColor});
+                    letter = data.uFirstName.charAt(0);
+                    $(modal5).find('.fChar2').append(letter.toUpperCase());
+                    $(modal5).find('b').append(data.uFirstName.substr(0,1).toUpperCase()+data.uFirstName.substr(1)+' '+data.uSecondName.substr(0,1).toUpperCase()+data.uSecondName.substr(1));
+                    $(modal5).find('.email2').append(data.uEmail);
+
+                    $(modal5).find('#companyName').append(data.uCompany);
+                    $(modal5).find('#emailMember').append(data.uEmail);
+                    $(modal5).find('#locationMember').append(data.uLocation);
+                    $(modal5).find('#statusVoteMember').append(data.uStatusVote);
+                    $(modal5).find('#roleMember').append(data.uRole);
+                    $(modal5).find('#statusAggrementMember').append(data.uStatusAgreement);
+
+                    blurButton(modal5);
+                    closeModal(modal5,currUrls);
+                    discardModal(modal5, mID, currUrls);
+                }
+                
+            }
+
+            else if (data.response == 0) {
+                console.log("Failed to fetch data user");
+            }
+        }
+
+        //Show modal for edit requirement
+        function editRequirement(data, rID, currUrls) {
+            
             modal4.showModal();
 
             $('.enterData2').removeClass('reject');
@@ -227,19 +223,11 @@
             focusInput(modal4);
             blurInput(modal4);
             saveModal(modal4, rID);
-            closeModal(modal4);
-            discardModal(modal4, rID);
+            closeModal(modal4,currUrls);
+            discardModal(modal4, rID, currUrls);
         }
 
-        $('tr').click(function(){
-
-            var rID = $(this).data('id');
-
-            $('.enterData2').css({"outline":"solid 1px rgba(0, 0, 0, 10%)"});
-
-            fetchRequirementData(rID);
-        });
-
+        //Input interaction
         function focusInput(m) {
             $(m).find('#rid').focus(function(){
                 $(this).css({"outline":"solid 3.5px rgba(58, 108, 217, 0.5)"});
@@ -250,6 +238,7 @@
             });
         }
 
+        //blur inpput
         function blurInput(m) {
             $(m).find('#rid').blur(function(){
                 $(this).css({"outline":"solid 1px rgba(0, 0, 0, 10%)"});
@@ -259,14 +248,46 @@
             });
         }
 
-        function closeModal(m) {
-            $(m).find('.btnGrey').click(function(){
-                m.setAttribute("closing", "");
-                m.addEventListener("animationend",()=>{
-                    m.removeAttribute("closing");
-                    m.close();},
-                    {once:true});
-            });
+        //blur button dialog
+        function blurButton(m) {
+            $(m).find('.blurBtn').blur();
+        }
+
+        //Modal function
+        function closeModal(m,currUrls) {
+            if(currUrls == "http://localhost/cvpg-priosys/PMrequirement.php") {
+                $(m).find('.btnGrey').click(function(){
+                    m.setAttribute("closing", "");
+                    m.addEventListener("animationend",()=>{
+                        m.removeAttribute("closing");
+                        m.close();},
+                        {once:true});
+                });
+            }
+
+            else if (currUrls == "http://localhost/cvpg-priosys/PMStakeholder.php" || currUrls == "http://localhost/cvpg-priosys/SStakeholder.php"){
+                $(m).find('.btnGrey').click(function(){
+                    $(m).find('.fChar2').empty();
+                    $(m).find('b').empty();
+                    $(m).find('.email2').empty();
+                    $(m).find('#companyName').empty();
+                    $(m).find('#emailMember').empty();
+                    $(m).find('#locationMember').empty();
+                    $(m).find('#statusVoteMember').empty();
+                    $(m).find('#roleMember').empty();
+                    $(m).find('#statusAggrementMember').empty();
+                    m.setAttribute("closing", "");
+                    m.addEventListener("animationend",()=>{
+                        m.removeAttribute("closing");
+                        m.close();},
+                        {once:true});
+                });
+            }
+
+            // else if (currUrls == ) {
+
+            // }
+            
         }
 
         function saveModal(m, rID) {
@@ -322,34 +343,212 @@
             });
         }
 
-        function discardModal(m, rID) {
-            $(m).find('#deleteRequirement').click(function(){
-                $(this).prop('disabled', true).css({"cursor":"not-allowed"});
-                $(this).siblings('button').prop('disabled', true).css({"cursor":"not-allowed"});
-                $(this).siblings('.loading').show();
+        function discardModal(m, ID, currUrls) {
 
-                $.ajax({
-                    type:'POST',
-                    data:{
-                        rID:rID,
-                        action:'deleteRequirement',
-                    },
-                    url:'includes/function.php',
-                    success:function(data) {
-                          
-                        if(data == 1) {
-                            window.location.reload();
-                        }
+            if(currUrls == "http://localhost/cvpg-priosys/PMStakeholder.php") {
+                console.log("Trying to delete stakeholders")
+            }
 
-                        else {
-                            alert('fail to delete requirement');
-                            window.location.reload();
+            else if (currUrls == "http://localhost/cvpg-priosys/PMrequirement.php") {
+                $(m).find('#deleteRequirement').click(function(){
+                    $(this).prop('disabled', true).css({"cursor":"not-allowed"});
+                    $(this).siblings('button').prop('disabled', true).css({"cursor":"not-allowed"});
+                    $(this).siblings('.loading').show();
+
+                    $.ajax({
+                        type:'POST',
+                        data:{
+                            rID:rID,
+                            action:'deleteRequirement',
+                        },
+                        url:'includes/function.php',
+                        success:function(data) {
+                              
+                            if(data == 1) {
+                                window.location.reload();
+                            }
+
+                            else {
+                                alert('fail to delete requirement');
+                                window.location.reload();
+                            }
+                            
                         }
-                        
-                    }
+                    });
                 });
+            }
+            
+        }
+
+        //Project page
+        $('div.project').children('#projectCaption').html(function(index,currentText) {
+            var maxLength = 73;
+            var text = 'See more...';
+
+            if (currentText.length > maxLength) {
+                return currentText.substr(0,maxLength) + '. ' + text.fontcolor('#236BF6');
+            }
+
+            else {
+                return currentText + ' ' + text.fontcolor("#236BF6");
+            }
+
+        });
+
+        $('div.project').children('.option').click(function(e){
+            e.stopPropagation();
+            $(this).next().toggle();
+            
+            $(this).next().find('li').click(function(e){
+
+                e.stopPropagation();
+
+                var pID = $(this).parents('div.project').data('id')
+
+                //Opening project from dropdown
+                if($(this).attr('id') == 'open'){
+
+                    $.ajax({
+                        type: "POST",
+                        data: {
+                            pID: pID,
+                            action: "openProject"
+                        },
+                        url: "includes/function.php",
+                        dataType: "html",
+                        success: function (data) {
+
+                            if(data == 1) {
+
+                                window.location = "PMrequirement.php";
+                            }
+
+                            else if (data == 0){
+                                window.location = "Srequirement.php";
+                            }
+
+                            else {
+                                alert("Fail to open project");
+                                window.locatioin = "home.php";
+                            }
+
+                        }
+                    });
+
+                }
+
+                //Deleting project
+                else if($(this).attr('id') == 'delete') {
+                    modal2.showModal();
+                    $('#closeModalMain').blur();
+                    $(this).off('click');
+                    $(this).parents('div.menus').hide();
+                    openingModalProject($(this), $(this).parents('div.project').data('id'),modal2);
+
+                }
+            });
+        });
+
+        //Opening project
+        $('div.project').click(function(){
+            $(this).css({"outline-color":"rgba(58, 108, 217, 0.5)", "outline-style":"solid", "outline-width":"3.5px"});
+
+            var pID = $(this).data('id')
+
+            $.ajax({
+                type: "POST",
+                data: {
+                    pID: pID,
+                    action: "openProject"
+                },
+                url: "includes/function.php",
+                dataType: "html",
+                success: function (data) {
+
+                    if(data == 1) {
+                        window.location = "PMrequirement.php";
+                    }
+
+                    else if (data == 0){
+                        window.location = "Srequirement.php";
+                    }
+
+                    else {
+                        alert("Fail to open project");
+                        window.locatioin = "home.php";
+                    }
+
+                }
+            });
+        });
+
+        var currUrls = window.location.href;
+
+        //Requirement page
+        //MouseHover table Requirement
+        if (currUrls == "http://localhost/cvpg-priosys/PMrequirement.php" ) {
+            PmSideRequirement(currUrls);
+        }
+
+        else if (currUrls == "http://localhost/cvpg-priosys/Srequirement.php") {
+            SkSideRequirement(currUrls);
+        }
+
+        function PmSideRequirement(currUrls) {
+            $('.rData tr').mouseenter(function(){
+                $(this).addClass('hoverEffect');
+            });
+
+            $('.rData tr').mouseleave(function(){
+                $(this).removeClass('hoverEffect');
+            });
+
+            $('tr').click(function(){
+
+                var rID = $(this).data('id');
+
+                $('.enterData2').css({"outline":"solid 1px rgba(0, 0, 0, 10%)"});
+
+                fetchData(rID,currUrls);
             });
         }
+
+        function SkSideRequirement(currUrls) {
+            $('tr').css({"cursor":"default"});
+        }
+
+        //Stakeholder page
+        //MouseHover table Stakeholder
+        if (currUrls == "http://localhost/cvpg-priosys/PMStakeholder.php" || currUrls == "http://localhost/cvpg-priosys/SStakeholder.php") {
+            stakeholderPage(currUrls);
+        }
+
+        function stakeholderPage(currUrls) {
+            $('.sData tr').mouseenter(function(){
+                $(this).addClass('hoverEffect');
+            });
+
+            $('.sData tr').mouseleave(function(){
+                $(this).removeClass('hoverEffect');
+            });
+
+            $('tr').click(function(){
+
+                var mID = $(this).data('id');
+
+                fetchData(mID,currUrls);
+            });
+        }
+
+        $('td').find('#inviteStakeholder').click(function(){
+            console.log($(this).data('id'));
+            modal8.showModal();
+            blurButton(modal8);
+
+            $(modal8).find('#check').click(function(){
+                window.location = "http://localhost/cvpg-priosys/PMStakeholder.php";
+            });
+        });
 
     });
 </script>

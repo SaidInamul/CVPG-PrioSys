@@ -63,11 +63,11 @@
 				</div>
 				<div class="loading">
 				</div>
-				<button class="btnGrey" id="addProject">Add project...</button>
+				<button class="btnGrey btnSubHeader" id="addProject">Add project...</button>
 
 			</div>
 			<p class="heading caption">Project</p>
-			<p class="caption">This page shows your list of projects with their status. You able to add and delete project. To start your project, you can click on one of your project below. If you can’t find your project, you can search your project at the search bar above.</p>
+			<p class="caption">This page shows your list of projects. You able to add and delete project. To start your project, you can click on one of your project below. If you can’t find your project, you can search your project at the search bar above.</p>
 		</div>
 		<div class="content">
 			<p class="caption" id="noProject" style="text-align: center;">No project involve. Create your first project <span class="link" id="addProject2">here...</span></p>

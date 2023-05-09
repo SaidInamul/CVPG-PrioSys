@@ -310,13 +310,13 @@
 			<div class="subLinkRequirement">
 				<div class="dropdownRequirement">
 					<ul class="menu">
-						<li id="requirementPagePM">Requirements...</li>
-						<li id="votingPagePM">Voting...</li>
+						<li id="requirementPageSK">Requirements...</li>
+						<li id="votingPageSK">Voting...</li>
 					</ul>
 				</div>
 				
 			</div>
-			<a href="PMStakeholder.php" id="linkStakeholders">Stakeholders</a>
+			<a href="SStakeholder.php" id="linkStakeholders">Stakeholders</a>
 			<a href="#" id="linkProjectDetails">Project details</a>
 		</div>
 		<div class="profile">

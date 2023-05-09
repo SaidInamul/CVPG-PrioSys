@@ -77,6 +77,22 @@
 			searchRequirement($inputSearch);
 		}
 
+		else if($_GET['action'] == 'stakeholder') {
+			fetchStakeholder();
+		}
+
+		else if($_GET['action'] == 'searchS') {
+			$inputSearch = validateInput($_GET['inputSearch']);
+			sleep(2);
+			searchStakeholderProject($inputSearch);
+		}
+
+		else if($_GET['action'] == 'searchSToInvite') {
+			$inputSearch = validateInput($_GET['inputSearch']);
+			sleep(2);
+			searchStakeholderToInvite($inputSearch);
+		}
+
 	}
 
 	else if(isset($_POST['action'])) {
@@ -117,6 +133,11 @@
 			$rID = $_POST['rID'];
 			sleep(2);
 			deleteRequirement($rID);
+		}
+
+		else if($_POST['action'] == "fetchUserData") {
+			$uID = $_POST['uID'];
+			fetchUserData($uID);
 		}
 	}
 
@@ -503,6 +524,25 @@
 		}
 	}
 
+	function checkUserRole($idu,$idp) {
+		global $con;
+
+		$query = "SELECT idrole FROM group_project WHERE idu = $idu AND idp = $idp LIMIT 1;";
+
+		$result = mysqli_query($con,$query);
+
+		if(mysqli_num_rows($result) > 0) {
+			$row = mysqli_fetch_assoc($result);
+			$idRole = $row['idrole'];
+
+			return $idRole;
+		}
+
+		else {
+			return -1;
+		}
+	}
+
 	function fetchRequirement() {
 		global $con;
 		$idp = $_SESSION['idp'];
@@ -689,6 +729,232 @@
 
 		else {
 			echo 0;
+		}
+	}
+
+	function fetchStakeholder() {
+		global $con;
+		$idp = $_SESSION['idp'];
+
+		$query = "SELECT user.idu, user.first_name, user.last_name, user.email, user.company, role.name, status_vote.name FROM user INNER JOIN group_project ON user.idu = group_project.idu INNER JOIN role ON group_project.idrole = role.idrole INNER JOIN status_vote ON status_vote.idsv = group_project.idsv WHERE group_project.idp = $idp ORDER BY role.idrole ASC;";
+
+		$result = mysqli_query($con,$query);
+
+		if(mysqli_num_rows($result) > 0) {
+			$i = 1;
+
+	   		while ($data = mysqli_fetch_array($result)): ?>
+
+	        <tr data-id="<?php echo $data[0] ?>">
+	        	<td><?php echo $i ?></td>
+	            <td>
+	            	<p class="userName">
+	            		<b>
+	            			<?php echo $data[1] . ' ' . $data[2] ?>
+	            		</b>
+	            	</p>
+	            	<p class="emailUser">
+	            		<?php echo $data[3] ?>
+	            	</p>
+	            </td>
+	            <td><?php echo $data[4] ?></td>
+	            <td><?php echo $data[5] ?></td>
+	            <td><?php echo $data[6] ?></td>
+	        </tr>
+
+			<?php
+
+			$i++;
+			
+			endwhile;
+
+			require 'ajaxFunction.php';	
+		}
+
+		else {
+			echo 0;
+		}
+	}
+
+	function fetchUserData ($uID) {
+		global $con;
+		$idp = $_SESSION['idp'];
+
+		$query = "SELECT user.first_name, user.last_name, user.email, user.company, role.name, status_vote.name, status_agreement.name, role.idrole, user.backgroundColor, user.location FROM user INNER JOIN group_project ON user.idu = group_project.idu INNER JOIN role ON group_project.idrole = role.idrole INNER JOIN status_vote ON status_vote.idsv = group_project.idsv INNER JOIN status_agreement ON group_project.idsa = status_agreement.idsa WHERE group_project.idp = $idp AND group_project.idu = $uID;";
+
+		$result = mysqli_query($con,$query);
+
+		if(mysqli_num_rows($result) > 0) {
+			$data = mysqli_fetch_array($result);
+			$uFirstName = $data[0];
+			$uSecondName = $data[1];
+			$uEmail = $data[2];
+			$uCompany = $data[3];
+			$uRole = $data[4];
+			$uStatusVote = $data[5];
+			$uStatusAgreement = $data[6];
+			$roleID = $data[7];
+			$backgrounColor = $data[8];
+			$uLocation = $data[9];
+		}
+
+		else {
+			$data['response'] = 0;
+
+			echo json_encode($data);
+		}
+
+		$data['uFirstName'] = $uFirstName;
+		$data['uSecondName'] = $uSecondName;
+		$data['uEmail'] = $uEmail;
+		$data['uCompany'] = $uCompany;
+		$data['uRole'] = $uRole;
+		$data['uStatusVote'] = $uStatusVote;
+		$data['uStatusAgreement'] = $uStatusAgreement;
+		$data['roleID'] = $roleID;
+		$data['backgrounColor'] = $backgrounColor;
+		$data['uLocation'] = $uLocation;
+		$data['response'] = 1;
+
+		echo json_encode($data);
+	}
+
+	function searchStakeholderProject($inputSearch) {
+		global $con;
+		$idp = $_SESSION['idp'];
+
+		$query = "SELECT user.idu, user.first_name, user.last_name, user.email, user.company, role.name, status_vote.name FROM user INNER JOIN group_project ON user.idu = group_project.idu INNER JOIN role ON group_project.idrole = role.idrole INNER JOIN status_vote ON status_vote.idsv = group_project.idsv WHERE group_project.idp = $idp AND (user.first_name LIKE '%$inputSearch%' OR user.last_name LIKE '%$inputSearch%' OR user.email LIKE '%$inputSearch%' OR user.company LIKE '%$inputSearch%') ORDER BY role.idrole ASC;";
+
+
+
+		$result = mysqli_query($con, $query);
+
+		if(mysqli_num_rows($result) > 0) {
+			$i = 1;
+
+	   		while ($data = mysqli_fetch_array($result)): ?>
+
+	        <tr data-id="<?php echo $data[0] ?>">
+	        	<td><?php echo $i ?></td>
+	            <td>
+	            	<p class="userName">
+	            		<b>
+	            			<?php echo $data[1] . ' ' . $data[2] ?>
+	            		</b>
+	            	</p>
+	            	<p class="emailUser">
+	            		<?php echo $data[3] ?>
+	            	</p>
+	            </td>
+	            <td><?php echo $data[4] ?></td>
+	            <td><?php echo $data[5] ?></td>
+	            <td><?php echo $data[6] ?></td>
+	        </tr>
+
+			<?php
+
+			$i++;
+			
+			endwhile;
+
+			require 'ajaxFunction.php';	
+		}
+
+		else {
+			echo 0;
+		}
+	}
+
+	function searchStakeholderToInvite($inputSearch) {
+		global $con;
+
+		$idp = $_SESSION['idp'];
+
+
+		$query = "SELECT user.idu, user.first_name, user.last_name, user.email, user.company FROM user WHERE user.first_name LIKE '%$inputSearch%' OR user.last_name LIKE '%$inputSearch%' OR user.email LIKE '%$inputSearch%' OR user.company LIKE '%$inputSearch%';";
+
+		$result = mysqli_query($con, $query);
+
+		if(mysqli_num_rows($result) > 0) {
+			$i = 1;
+
+	   		while ($data = mysqli_fetch_array($result)): ?>
+
+	   			<?php
+	   				if(checkUserInvitation($data[0],$idp) == 0) { ?>
+
+	   					<tr>
+				        	<td><?php echo $i ?></td>
+				            <td>
+				            	<p class="userName">
+				            		<b>
+				            			<?php echo $data[1] . ' ' . $data[2] ?>
+				            		</b>
+				            	</p>
+				            	<p class="emailUser">
+				            		<?php echo $data[3] ?>
+				            	</p>
+				            	<p class="companyName">
+				            		<?php echo $data[4] ?>
+				            	</p>
+				            </td>
+				            <td class="rowAction"><button class="btnSecondary blue" id="inviteStakeholder" data-id = "<?php echo $data[0] ?>">Add stakeholder into the project...</button></td>
+				        </tr>
+
+	   			<?php
+	   				}
+
+	   				else if (checkUserInvitation($data[0],$idp) == 1) { ?>
+
+	   					<tr>
+				        	<td><?php echo $i ?></td>
+				            <td>
+				            	<p class="userName">
+				            		<b>
+				            			<?php echo $data[1] . ' ' . $data[2] ?>
+				            		</b>
+				            	</p>
+				            	<p class="emailUser">
+				            		<?php echo $data[3] ?>
+				            	</p>
+				            	<p class="companyName">
+				            		<?php echo $data[4] ?>
+				            	</p>
+				            </td>
+				            <td class="rowAction"><button class="btnSecondary" disabled>Added into the project...</button></td>
+				        </tr>
+
+	   			<?php
+	   				}
+	   			?>
+
+			<?php
+
+			$i++;
+			
+			endwhile;
+
+			require 'ajaxFunction.php';	
+		}
+
+		else {
+			echo 0;
+		}
+	}
+
+	function checkUserInvitation($uID,$idp) {
+		global $con;
+
+		$query = "SELECT idu, idp FROM group_project WHERE idu = $uID AND idp = $idp;";
+
+		$result = mysqli_query($con,$query);
+
+		if(mysqli_num_rows($result) > 0) {
+			return 1;
+		}
+
+		else {
+			return 0;
 		}
 	}
 ?>
