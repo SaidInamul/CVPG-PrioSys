@@ -317,7 +317,7 @@
 				
 			</div>
 			<a href="PMStakeholder.php" id="linkStakeholders">Stakeholders</a>
-			<a href="#" id="linkProjectDetails">Project details</a>
+			<a href="PMProjectDetails.php" id="linkProjectDetails">Project details</a>
 		</div>
 		<div class="profile">
 			<div class="buttonProfile">

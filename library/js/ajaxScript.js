@@ -834,4 +834,51 @@ $(document).ready(function(){
             $("tbody.sDataAdd").html(data);
         }               
     }
+
+    //Project Details
+    if(currUrl == "http://localhost/cvpg-priosys/PMProjectDetails.php" || currUrl == "http://localhost/cvpg-priosys/SProjectDetails.php") {
+
+        $('#logo').click(function(){
+            window.location.reload();
+        });
+
+        $('#linkProjectDetails').css({"font-weight":"700"});
+
+        // $.ajax({
+        //     type: "GET",
+        //     data: {
+        //         action: "stakeholder"
+        //     },
+        //     url: "includes/function.php",
+        //     dataType: "html",
+        //     success: function (data) {
+
+        //         if(data == 0) {
+        //             $('#noStakeholder').show();
+        //         }
+
+        //         else {
+        //             $('div.content').hide();
+        //             $('div.stakeholder').show();
+        //             $("tbody.sData").html(data);
+        //         }
+
+        //     }
+        // });
+    }
+
+    const modal8 = document.querySelector("#modalEditProject");
+    const modal9 = document.querySelector("#modalUpdateStatusProject");
+
+    $('#updateStatusProject').click(function(){
+        modal9.showModal();
+
+        closeModal(modal9);
+    });
+
+    $('#updateProjectDetails').click(function(){
+        modal8.showModal();
+
+        closeModal(modal8);
+    });
 });   

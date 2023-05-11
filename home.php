@@ -26,9 +26,9 @@
 				<p class="naming">Developers :</p>
 				<input type="text" class="enterData" id="developer" placeholder="Developer company..." style="width: 204px;">
 				<p class="naming">Project status :</p>
-				<input type="text" class="enterData" id="pStatus" value="Modifying" disabled style="width: 125px;">
+				<input type="text" class="enterData disabledSearch" id="pStatus" value="Modifying" disabled style="width: 125px;">
 				<p class="naming">Project start :</p>
-				<input type="date" class="enterData" id="projectStart" placeholder="Pick date..." style="width: 125px;">
+				<input type="date" class="enterData" id="projectStart" placeholder="Pick date..." style="width: 135px;">
 				<p class="naming">Project description :</p>
 				<textarea placeholder="Tell us about your project..." rows="4" id="projectDesc"></textarea>
 			</div>
