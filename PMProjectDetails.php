@@ -44,19 +44,14 @@
 	<dialog class="modalManage2" id="modalUpdateStatusProject">
 		<div class="modalContent2">
 			<p class="naming2" style="grid-column: 1/2; grid-row: 1/2;">Update project's status :</p>
-			<input type="text" class="enterData2" id="projectStatus" style="grid-column: 2/3; grid-row: 1/2; width: 150px;">
-			<div class="dropdown">
-				<div class="select">
-					<span class="selected">Show all</span>
-					<img src="DropDownIcon.svg">
-				</div>
-				<ul class="menu">
-					<li id="1">Essential...</li>
-					<li id="2">Less - essential...</li>
-					<li id="3">Non - essential...</li>
-					<li id="4">Show all...</li>
-				</ul>
+			<div class="select" style="grid-column: 2/3; grid-row: 1/2; width: 150px; font-weight: 300; font-size: 13px; height: 25px;">
+				<span class="selected">Select status</span>
+				<img src="Illustration/Icon/Static/DropDownIcon.svg" style="padding-right: 3px;">
 			</div>
+			<ul class="menus2 list">
+				<li id="1">Modification...</li>
+				<li id="2">Voting...</li>
+			</ul>
 		</div>
 		<hr class="line2">
 		<div class="modalFoot2">
@@ -159,7 +154,20 @@
         $('.resultSegment').css({
           "display" : "none"
         });
-      });       
+      }); 
+
+      $('.select').click(function(){
+      	$('.menus2').toggle();
+
+      	$(this).next().find('li').click(function(){
+      		// console.log($(this).attr('id'));
+
+      		$(this).parent().siblings('.select').find('span').text($(this).text());
+
+      		$('.menus2').toggle();
+
+      	});
+      });      
 
     });
   </script>
